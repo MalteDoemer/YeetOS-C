@@ -87,15 +87,6 @@ up:
     jmp .halt
 
 
-global clear_screen
-clear_screen:
-    mov edi, 0xB8000 + KERNEL_BASE
-    mov eax, 0x1F201F20
-    mov ecx, (80*25)/2
-    rep stosd
-    ret
-
-
 section .bss
 
 kernel_stack:

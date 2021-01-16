@@ -18,15 +18,18 @@ LD_FLAGS= -m elf_i386
 OBJS=\
 entry.o \
 main.o \
+tty.o \
 
 YeetOS: $(OBJS) link.ld
 	$(LD) $(LD_FLAGS) -T link.ld -o $@ $(OBJS)
 
 clean:
-	rm -f $(OBJS) YeetOS
+	rm -f $(OBJS) $(OBJS:.o=.d) YeetOS
 
 %.o: %.asm
 	$(ASM) $(ASM_FLAGS) $< -o $@
 
 %.o: %.c
-	$(CC) -c $(CC_FLAGS) $< -o $@
+	$(CC) -MMD -c $(CC_FLAGS) $< -o $@
+
+-include $(OBJS:.o=.d)

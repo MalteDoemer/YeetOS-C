@@ -1,10 +1,7 @@
 
-void clear_screen();
+#include "kernel.h"
 
-void main(void* multiboot_struct)
+void main(multiboot_info_t* multiboot_struct)
 {
-
     
-
-    clear_screen();
 }

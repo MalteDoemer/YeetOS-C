@@ -1,3 +1,6 @@
 YeetOS
 *.o
+*.d
 *.bin
+.clang-format
+disk.img
