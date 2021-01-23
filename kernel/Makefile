@@ -10,8 +10,8 @@ CC_FLAGS=\
 -fno-PIE \
 -nostdlib \
 -std=c99 \
--Wno-packed-bitfield-compat \
 -I include
+# -Wno-packed-bitfield-compat
 
 LD_FLAGS= -m elf_i386
 
@@ -19,6 +19,9 @@ OBJS=\
 entry.o \
 main.o \
 tty.o \
+gdt.o \
+idt.o \
+misc.o \
 
 YeetOS: $(OBJS) link.ld
 	$(LD) $(LD_FLAGS) -T link.ld -o $@ $(OBJS)

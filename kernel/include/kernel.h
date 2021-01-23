@@ -8,5 +8,7 @@
 #include "common.h"
 #include "multiboot.h"
 #include "tty.h"
+#include "gdt.h"
+#include "idt.h"
 
 #endif // #ifndef KERNEL_H
