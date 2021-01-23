@@ -14,8 +14,7 @@
             "gdbpath": "/usr/bin/gdb",
             "autorun": [
                 "symbol-file kernel/YeetOS",
-                "directory kernel",
-                "break main"
+                "directory kernel"
             ]
         }
     ]

@@ -1,11 +1,12 @@
 #include "kernel.h"
 
 #ifdef GRAPHICS
+#error "graphics not supported!"
 #else
 
 uint16_t* const vram = (uint16_t* const)(0xB8000 + KERNEL_BASE);
 uint16_t cursor_pos = 0;
-uint8_t attributes = 0x1F;
+uint8_t vga_color = 0x1F;
 
 static void update_cursor()
 {
@@ -23,7 +24,7 @@ static void scroll()
             vram[i] = vram[i + SCREEN_WIDTH];
 
         for (int i = SCREEN_WIDTH * (SCREEN_HEIGHT - 1); i < SCREEN_WIDTH * SCREEN_HEIGHT; i++)
-            vram[i] = (attributes << 8) | ' ';
+            vram[i] = (vga_color << 8) | ' ';
     }
 }
 
@@ -36,7 +37,7 @@ static void write_char(char c)
         break;
     case '\t':
         for (int i = 0; i < TAB_SIZE; i++) {
-            vram[cursor_pos + i] = (attributes << 8) | ' ';
+            vram[cursor_pos + i] = (vga_color << 8) | ' ';
         }
         cursor_pos = (cursor_pos + TAB_SIZE) & ~(TAB_SIZE - 1);
         break;
@@ -48,7 +49,7 @@ static void write_char(char c)
         break;
     default:
         if (c >= ' ') {
-            vram[cursor_pos] = (attributes << 8) | c;
+            vram[cursor_pos] = (vga_color << 8) | c;
             cursor_pos++;
         }
         break;

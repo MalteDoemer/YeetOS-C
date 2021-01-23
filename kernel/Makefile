@@ -2,7 +2,7 @@ CC = i686-elf-gcc
 LD = i686-elf-ld
 ASM = nasm -f elf32
 
-ASM_FLAGS=
+ASM_FLAGS=-g
 
 CC_FLAGS=\
 -ggdb \
@@ -22,6 +22,7 @@ tty.o \
 gdt.o \
 idt.o \
 misc.o \
+common.o \
 
 YeetOS: $(OBJS) link.ld
 	$(LD) $(LD_FLAGS) -T link.ld -o $@ $(OBJS)

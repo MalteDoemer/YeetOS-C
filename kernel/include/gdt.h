@@ -11,7 +11,12 @@ typedef struct gdt_entry_t {
     uint8_t limit2 : 4;
     uint8_t flags : 4;
     uint8_t base3;
-} __attribute__((packed, aligned(16))) gdt_entry_t;
+} __attribute__((packed, aligned(8))) gdt_entry_t;
+
+typedef struct gdt_desc_t {
+    uint16_t size;
+    uint32_t addr;
+} __attribute__((packed, aligned(8))) gdt_desc_t;
 
 typedef struct tss_t {
     uint32_t link;
@@ -48,5 +53,6 @@ typedef struct tss_t {
 } __attribute__((packed, aligned(16))) tss_t;
 
 void init_gdt();
+void load_gdt();
 
 #endif // #ifndef GDT_H

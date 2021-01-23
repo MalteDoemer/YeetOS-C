@@ -5,6 +5,7 @@
 
 #include "stdint.h"
 #include "stdarg.h"
+#include "stddef.h"
 #include "common.h"
 #include "multiboot.h"
 #include "tty.h"

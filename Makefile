@@ -48,6 +48,7 @@ run: install
 	-drive format=raw,file='\\wsl$$\Ubuntu$(IMAGE)',if=ide \
 	-m 512 \
 	-name "YeetOS" \
+	-d cpu_reset
 	
 debug: install
 	qemu-system-i386.exe \

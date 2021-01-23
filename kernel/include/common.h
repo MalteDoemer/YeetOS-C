@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #include "stdint.h"
+#include "stddef.h"
 
 static inline void outb(uint16_t port, uint8_t data){
     __asm volatile("outb %1, %0"::"dN"(port), "a"(data));
@@ -22,6 +23,14 @@ static inline uint16_t inw(uint16_t port){
     __asm volatile("inw %1, %0":"=a"(ret):"dN"(port));
     return ret;
 }
+
+void* memset(void* d, int c, size_t n);
+
+void* memcpy(void* dest, void* src, size_t n);
+
+size_t strlen(char* str);
+
+int strcmp(char* str1, char* str2);
 
 
 #endif // #ifndef COMMON_H
