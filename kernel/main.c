@@ -3,7 +3,11 @@
 
 void main(multiboot_info_t* multiboot_struct)
 {
-    clear_screen();
     init_gdt();
+    init_idt();
+
+    clear_screen();
     printf("Success!");
+
+    return;
 }

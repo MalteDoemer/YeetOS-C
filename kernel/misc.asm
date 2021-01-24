@@ -19,6 +19,13 @@ load_gdt:
     ret
 
 
+[global load_idt]
+load_idt:
+    mov eax, [esp + 4]
+    lidt [eax]
+
+    ret
+
 [global clear_screen]
 [extern vga_color]
 [extern vram]

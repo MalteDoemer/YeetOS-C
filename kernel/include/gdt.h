@@ -13,10 +13,10 @@ typedef struct gdt_entry_t {
     uint8_t base3;
 } __attribute__((packed, aligned(8))) gdt_entry_t;
 
-typedef struct gdt_desc_t {
+typedef struct gdtr_t {
     uint16_t size;
     uint32_t addr;
-} __attribute__((packed, aligned(8))) gdt_desc_t;
+} __attribute__((packed, aligned(8))) gdtr_t;
 
 typedef struct tss_t {
     uint32_t link;
