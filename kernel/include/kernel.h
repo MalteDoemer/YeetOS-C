@@ -6,10 +6,12 @@
 #include "stdint.h"
 #include "stdarg.h"
 #include "stddef.h"
+#include "stdbool.h"
 #include "common.h"
 #include "multiboot.h"
 #include "tty.h"
 #include "gdt.h"
 #include "idt.h"
+#include "isr.h"
 
 #endif // #ifndef KERNEL_H

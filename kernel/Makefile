@@ -23,7 +23,8 @@ gdt.o \
 idt.o \
 misc.o \
 common.o \
-ints.o
+ints.o \
+isr.o
 
 YeetOS: $(OBJS) link.ld
 	$(LD) $(LD_FLAGS) -T link.ld -o $@ $(OBJS)
