@@ -10,6 +10,7 @@
 #include "common.h"
 #include "multiboot.h"
 #include "tty.h"
+#include "memory.h"
 #include "gdt.h"
 #include "idt.h"
 #include "isr.h"

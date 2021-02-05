@@ -24,7 +24,9 @@ idt.o \
 misc.o \
 common.o \
 ints.o \
-isr.o
+isr.o \
+memory.o \
+multiboot.o
 
 YeetOS: $(OBJS) link.ld
 	$(LD) $(LD_FLAGS) -T link.ld -o $@ $(OBJS)

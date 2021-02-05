@@ -16,7 +16,7 @@
 // #define MULTIBOOT_FLAGS_VBE (1 << 10)
 // #define MULTIBOOT_FLAGS_FRAME (1 << 11)
 
-typedef struct multiboot_info_t {
+typedef struct mboot_info_t {
     uint32_t flags;
     uint32_t mem_lower;
     uint32_t mem_upper;
@@ -57,6 +57,19 @@ typedef struct multiboot_info_t {
     // uint32_t framebuffer_type;
     // uint32_t color_info;
 
-} multiboot_info_t;
+} mboot_info_t;
+
+typedef struct mboot_mmap_t {
+    uint32_t size;
+    uint32_t addr;
+    uint32_t length;
+    uint32_t type;
+} mboot_mmap_t;
+
+
+mboot_info_t* get_mboot_info();
+void set_mboot_info(mboot_info_t* mboot);
+
+
 
 #endif // #ifndef MULTIBOOT_H

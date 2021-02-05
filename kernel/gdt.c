@@ -17,7 +17,7 @@ void set_gdt_entry(int index, uint32_t base, uint32_t limit, uint8_t access, uin
     gdt[index].flags = flags & 0xF;
 }
 
-void init_gdt()
+bool init_gdt()
 {
     memset(&tss, 0, sizeof(tss));
     memset(&gdt, 0, sizeof(gdt));
@@ -32,4 +32,6 @@ void init_gdt()
     gdtr.size = sizeof(gdt) - 1;
 
     load_gdt(&gdtr);
+
+    return true;
 }

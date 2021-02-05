@@ -2,6 +2,7 @@
 #define GDT_H
 
 #include "stdint.h"
+#include "stdbool.h"
 
 typedef struct gdt_entry_t {
     uint16_t limit1;
@@ -52,7 +53,7 @@ typedef struct tss_t {
 
 } __attribute__((packed, aligned(16))) tss_t;
 
-void init_gdt();
+bool init_gdt();
 void load_gdt();
 
 #endif // #ifndef GDT_H

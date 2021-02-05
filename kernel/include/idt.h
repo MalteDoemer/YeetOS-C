@@ -1,8 +1,8 @@
 #ifndef IDT_H
 #define IDT_H
 
+#include "stdint.h"
 #include "stdbool.h"
-#include "isr.h"
 
 typedef struct idt_entry_t {
     uint16_t offset1;
@@ -22,9 +22,7 @@ typedef struct isr_stub_t {
     uint8_t code[9];
 } isr_stub_t;
 
-typedef void (*isr_t)(regs_t*);
-
-void init_idt();
+bool init_idt();
 void load_idt(idtr_t* idtr);
 
 void mask_irq(uint8_t irq, bool mask);

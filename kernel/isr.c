@@ -88,7 +88,7 @@ void security_exception(regs_t* regs)
 {
 }
 
-void init_isr()
+bool init_isr()
 {
     memset(isrs, 0, sizeof(isrs));
 
@@ -113,4 +113,6 @@ void init_isr()
     isrs[19] = simd_floating_point_exception;
     isrs[20] = virtualization_exception;
     isrs[30] = security_exception;
+
+    return true;
 }
