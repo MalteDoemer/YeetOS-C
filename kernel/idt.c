@@ -33,8 +33,6 @@ void mask_irq(uint8_t irq, bool mask)
     uint8_t pic1_mask = inb(0x21);
     uint8_t pic2_mask = inb(0xA1);
 
-    printf("pic1: %b\npic2: %b\n", pic1_mask, pic2_mask);
-
     if (irq < 8) {
         pic1_mask = mask ? pic1_mask | (1 << irq) : pic1_mask & ~(1 << irq);
     } else {
@@ -55,7 +53,7 @@ bool init_idt()
     for (int i = 0; i < 256; i++) {
         idt[i].offset1 = ((uint32_t)&isr_stub_table[i]) & 0xFFFF;
         idt[i].offset2 = (((uint32_t)&isr_stub_table[i]) >> 16) & 0xFFFF;
-        idt[i].selector = 0x08; // just system selector for now
+        idt[i].selector = KERNEL_CODE_DESC;
         idt[i].type = 0x8E;
         idt[i].zero = 0;
     }

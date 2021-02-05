@@ -7,84 +7,134 @@ void isr_handler(regs_t* regs)
 {
     if (isrs[regs->int_no])
         isrs[regs->int_no](regs);
-    else 
-        printf("missing intterupt handler #%d\n", regs->int_no);
+    else
+        WARN("missing intterupt handler #%d\n", regs->int_no);
 }
 
 void divide_by_zero(regs_t* regs)
 {
-    clear_screen();
-    printf("Divide By Zero AMK!!");
-    for (;;);
+    PANIC("%s", "Divide By Zero AMK!!");
+    for (;;)
+        hlt();
 }
 
 void debug(regs_t* regs)
 {
+    WARN("%s", "Debug Exception.");
 }
 
 void nmi(regs_t* regs)
 {
+    WARN("%s", "NMI occured.");
 }
 
 void breakpoint(regs_t* regs)
 {
+    WARN("%s", "Breakpoint hit.");
 }
 
 void overflow(regs_t* regs)
 {
+    PANIC("%s", "Overflow Exception");
+    for (;;) hlt();
 }
 
 void bound_range_exceeded(regs_t* regs)
 {
+    PANIC("%s", "Bound Range Exception");
+    for (;;) hlt();
 }
 
 void invalid_opcode(regs_t* regs)
 {
+    PANIC("%s", "Error: The CPU found an invalid opcode.\nThat is very bad.\nIt means the human being who wrote this program is very bad at programming.\nI wish him good luck for fixing that bug.\nHave a nice day!\n\nMaybe he isn't that bad after all and just used an int 0x6 to print this message");
+    for (;;) hlt();
 }
 
 void device_not_available(regs_t* regs)
 {
+    PANIC("%s", "Device Not Available Exception");
+    for (;;) hlt();
 }
 
 void double_fault(regs_t* regs)
 {
+    PANIC("%s", "Double Fault");
+    for (;;) hlt();
 }
+
 void coprocessor_segment_overrun(regs_t* regs)
 {
+    PANIC("%s", "Coprocessor Segment Overrun");
+    for (;;) hlt();
 }
+
 void invalid_tss(regs_t* regs)
 {
+    PANIC("%s", "Invalid TSS");
+    for (;;) hlt();
 }
 
 void segment_not_present(regs_t* regs)
 {
+    PANIC("%s", "Segfault");
+    for (;;) hlt();
 }
+
 void stack_segment_fault(regs_t* regs)
 {
+    PANIC("%s", "Stack Segfault");
+    for (;;) hlt();
 }
+
 void general_protection_fault(regs_t* regs)
 {
+    PANIC("%s", "General Protection Fault");
+    for (;;) hlt();
 }
+
 void page_fault(regs_t* regs)
 {
+    WARN("%s", "Pagefault");
 }
 
 void x87_floating_point_exception(regs_t* regs)
 {
+    PANIC("%s", "x87 Floating Point Exception");
+    for (;;) hlt();
 }
+
 void alignment_check(regs_t* regs)
 {
+    PANIC("%s", "Alignment Check Exception");
+    for (;;) hlt();
 }
+
 void machine_check(regs_t* regs)
 {
+    PANIC("%s", "Machine Check Exception");
+    for (;;) hlt();
 }
+
 void simd_floating_point_exception(regs_t* regs)
 {
+    PANIC("%s", "SIMD Floating-Point Exception");
+    for (;;) hlt();
 }
+
 void virtualization_exception(regs_t* regs)
 {
+    PANIC("%s", "Virtualization Exception");
+    for (;;) hlt();
 }
+
 void security_exception(regs_t* regs)
+{
+    PANIC("%s", "Security Exception");
+    for (;;) hlt();
+}
+
+void int80()
 {
 }
 
@@ -113,6 +163,8 @@ bool init_isr()
     isrs[19] = simd_floating_point_exception;
     isrs[20] = virtualization_exception;
     isrs[30] = security_exception;
+
+    isrs[0x80] = int80;
 
     return true;
 }

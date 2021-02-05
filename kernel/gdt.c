@@ -33,5 +33,15 @@ bool init_gdt()
 
     load_gdt(&gdtr);
 
+    tss.ss0 = KERNEL_DATA_DESC;
+    tss.iopb = sizeof(tss); // everybody does this
+
+    load_tss(TSS_DESC);
+
     return true;
+}
+
+void set_esp0(uint32_t esp0)
+{
+    tss.esp0 = esp0;
 }

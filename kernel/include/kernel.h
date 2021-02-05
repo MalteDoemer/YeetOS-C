@@ -3,6 +3,9 @@
 
 #define KERNEL_BASE 0xC0000000
 
+#define PANIC(msg, __VA_ARGS) clear_screen(); printf("Fatal Error: "); printf(msg, __VA_ARGS)
+#define WARN(msg, __VA_ARGS) printf("Warning: "); printf(msg, __VA_ARGS)
+
 #include "stdint.h"
 #include "stdarg.h"
 #include "stddef.h"

@@ -4,6 +4,14 @@
 #include "stdint.h"
 #include "stdbool.h"
 
+
+#define KERNEL_CODE_DESC 0x08
+#define KERNEL_DATA_DESC 0x10
+#define USER_CODE_DESC 0x1B
+#define USER_DATA_DESC 0x23
+#define TSS_DESC 0x2B
+
+
 typedef struct gdt_entry_t {
     uint16_t limit1;
     uint16_t base1;
@@ -54,6 +62,10 @@ typedef struct tss_t {
 } __attribute__((packed, aligned(16))) tss_t;
 
 bool init_gdt();
-void load_gdt();
+
+void load_gdt(gdtr_t* gdtr);
+void load_tss(uint16_t desc);
+
+void set_esp0(uint32_t esp0);
 
 #endif // #ifndef GDT_H

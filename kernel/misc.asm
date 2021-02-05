@@ -26,6 +26,14 @@ load_idt:
 
     ret
 
+[global load_tss]
+load_tss:
+    mov ax, [esp + 4]
+    ltr ax
+    ret
+
+    
+
 [global clear_screen]
 [extern vga_color]
 [extern vram]

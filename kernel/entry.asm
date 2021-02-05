@@ -78,8 +78,12 @@ up:
     mov esp, kernel_stack.top
     mov ebp, esp
 
+    ; correct the pointer to mboot structure
     add ebx, KERNEL_BASE
+
+    ; push the arguments to main on the stack
     push ebx
+    push kernel_stack.top
     call main
 
 .halt:
