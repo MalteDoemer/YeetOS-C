@@ -95,7 +95,8 @@ void general_protection_fault(regs_t* regs)
 
 void page_fault(regs_t* regs)
 {
-    WARN("%s", "Pagefault");
+    PANIC("%s", "Pagefault");
+    for (;;) hlt;
 }
 
 void x87_floating_point_exception(regs_t* regs)

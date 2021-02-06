@@ -13,8 +13,6 @@
 #define MULTIBOOT_FLAGS_DRIVES (1 << 7)
 #define MULTIBOOT_FLAGS_CONFIG (1 << 8)
 #define MULTIBOOT_FLAGS_NAME (1 << 9)
-// #define MULTIBOOT_FLAGS_VBE (1 << 10)
-// #define MULTIBOOT_FLAGS_FRAME (1 << 11)
 
 typedef struct mboot_info_t {
     uint32_t flags;
@@ -24,7 +22,6 @@ typedef struct mboot_info_t {
     uint32_t cmdline;
     uint32_t mods_count;
     uint32_t mods_addr;
-    uint32_t syms;
 
     uint32_t elf_num;
     uint32_t elf_size;
@@ -57,18 +54,27 @@ typedef struct mboot_info_t {
     // uint32_t framebuffer_type;
     // uint32_t color_info;
 
-} mboot_info_t;
+} __attribute__((packed)) mboot_info_t;
 
 typedef struct mboot_mmap_t {
     uint32_t size;
-    uint32_t addr;
-    uint32_t length;
+    uint32_t addr_low;
+    uint32_t addr_high;
+    uint32_t length_low;
+    uint32_t length_high;
     uint32_t type;
-} mboot_mmap_t;
+} __attribute__((packed)) mboot_mmap_t;
+
+typedef struct mboot_mod_t {
+    uint32_t mod_start;
+    uint32_t mod_end;
+    uint32_t string;
+    uint32_t reserved;
+} __attribute__((packed)) mboot_mod_t;
 
 
 mboot_info_t* get_mboot_info();
-void set_mboot_info(mboot_info_t* mboot);
+void init_multiboot(mboot_info_t* mboot);
 
 
 

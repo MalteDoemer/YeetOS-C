@@ -25,6 +25,8 @@ static void scroll()
 
         for (int i = SCREEN_WIDTH * (SCREEN_HEIGHT - 1); i < SCREEN_WIDTH * SCREEN_HEIGHT; i++)
             vram[i] = (vga_color << 8) | ' ';
+
+        cursor_pos = SCREEN_WIDTH * (SCREEN_HEIGHT - 1);
     }
 }
 
