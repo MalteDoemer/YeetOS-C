@@ -91,6 +91,7 @@ void general_protection_fault(regs_t* regs)
 {
     PANIC("%s", "General Protection Fault");
     for (;;) hlt();
+
 }
 
 void page_fault(regs_t* regs)
@@ -115,6 +116,7 @@ void machine_check(regs_t* regs)
 {
     PANIC("%s", "Machine Check Exception");
     for (;;) hlt();
+
 }
 
 void simd_floating_point_exception(regs_t* regs)
@@ -137,6 +139,11 @@ void security_exception(regs_t* regs)
 
 void int80()
 {
+}
+
+void fett(regs_t* regs)
+{
+    printf("Keypressed\n");
 }
 
 bool init_isr()

@@ -17,7 +17,7 @@ MBOOT_HEADER_FLAGS	equ MBOOT_PAGE_ALIGN | MBOOT_MEM_INFO
 MBOOT_CHECKSUM		equ -(MBOOT_HEADER_MAGIC + MBOOT_HEADER_FLAGS)
 
 ; The virtual address of the kernel
-KERNEL_BASE equ 0xC0000000
+KERNEL_BASE equ 0xFF800000
 
 
 ; Multiboot header for grub
@@ -35,15 +35,12 @@ mboot_header:
 
 align 4*1024
 
-; the boot page directory contains two entries:
-;   1: this identity maps the first 4MiB 
-;   2: this maps 4MiB from 0xC0000000 to 0x00
 boot_page_dir:
     dd 0x00000083
     times ((KERNEL_BASE >> 22) - 1) dd 0
     dd 0x00000083
-    times (1024 - (KERNEL_BASE >> 22) - 1) dd 0
-
+    dd 0x00400083
+    times (1024 - (KERNEL_BASE >> 22) - 2) dd 0
 
 start:
     cli

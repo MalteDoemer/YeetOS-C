@@ -12,6 +12,7 @@ void main(mboot_info_t* multiboot_struct, uint32_t kernel_stack)
     init_isr();
     init_mem();
 
+
     set_esp0(kernel_stack);
 
     printf("Finished Yey!");

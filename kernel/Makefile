@@ -7,26 +7,25 @@ ASM_FLAGS=-g
 CC_FLAGS=\
 -ggdb \
 -ffreestanding \
--fno-PIE \
 -nostdlib \
 -std=c99 \
--I include
+-I inc
 # -Wno-packed-bitfield-compat
 
 LD_FLAGS= -m elf_i386
 
 OBJS=\
-entry.o \
-main.o \
-tty.o \
-gdt.o \
-idt.o \
-misc.o \
-common.o \
-ints.o \
-isr.o \
-memory.o \
-multiboot.o
+src/entry.o \
+src/main.o \
+src/tty.o \
+src/gdt.o \
+src/idt.o \
+src/misc.o \
+src/common.o \
+src/ints.o \
+src/isr.o \
+src/memory.o \
+src/multiboot.o
 
 YeetOS: $(OBJS) link.ld
 	$(LD) $(LD_FLAGS) -T link.ld -o $@ $(OBJS)

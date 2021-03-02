@@ -4,9 +4,10 @@
 #include "stdint.h"
 #include "stddef.h"
 
-#define SET_BIT(A,B) (A | (1 << B))
-#define CLEAR_BIT(A,B) (A & ~(1 << B))
-#define TOGGLE_BIT(A,B) (A ^ (1 << B))
+#define SET_BIT(A,B) (A = (A | (1 << (B))))
+#define CLEAR_BIT(A,B) (A = (A & ~(1 << (B))))
+#define TOGGLE_BIT(A,B) (A = (A ^ (1 << (B))))
+#define TEST_BIT(A,B) (A & (1 << (B)))
 
 static inline void outb(uint16_t port, uint8_t data)
 {
