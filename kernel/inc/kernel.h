@@ -1,7 +1,7 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-#define KERNEL_BASE 0xFF800000
+#define KERNEL_BASE 0xC0000000
 
 #define PANIC(msg, __VA_ARGS) printf("Fatal Error: "); printf(msg, __VA_ARGS)
 #define WARN(msg, __VA_ARGS) printf("Warning: "); printf(msg, __VA_ARGS)

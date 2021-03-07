@@ -5,23 +5,23 @@ SECTIONS {
         *(.mboot)
     }
 
-    . += 0xFF800000;
+    . += 0xC0000000;
 
-    .text : AT(ADDR(.text) - 0xFF800000) {
-       code = . - 0xFF800000;
+    .text : AT(ADDR(.text) - 0xC0000000) {
+       code = . - 0xC0000000;
        *(.text)
        *(.rodata*)
     }
 
-    .data ALIGN (4K) : AT(ADDR(.data) - 0xFF800000) {
+    .data ALIGN (4K) : AT(ADDR(.data) - 0xC0000000) {
        *(.data)
     }
 
-    .bss ALIGN (4K) : AT(ADDR(.bss) - 0xFF800000) {
-       bss = . - 0xFF800000;
+    .bss ALIGN (4K) : AT(ADDR(.bss) - 0xC0000000) {
+       bss = . - 0xC0000000;
        *(COMMON)
        *(.bss)
-       end = . - 0xFF800000;
+       end = . - 0xC0000000;
     }
 
 

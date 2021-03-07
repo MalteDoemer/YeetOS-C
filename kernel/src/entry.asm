@@ -17,7 +17,7 @@ MBOOT_HEADER_FLAGS	equ MBOOT_PAGE_ALIGN | MBOOT_MEM_INFO
 MBOOT_CHECKSUM		equ -(MBOOT_HEADER_MAGIC + MBOOT_HEADER_FLAGS)
 
 ; The virtual address of the kernel
-KERNEL_BASE equ 0xFF800000
+KERNEL_BASE equ 0xC0000000
 
 
 ; Multiboot header for grub
