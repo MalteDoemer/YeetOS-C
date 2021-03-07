@@ -1,9 +1,8 @@
 bits 32
 
-extern main
 extern code
-extern bss
-extern end
+extern bss_start
+extern bss_end
 
 global start
 
@@ -21,7 +20,7 @@ KERNEL_BASE equ 0xC0000000
 
 
 ; Multiboot header for grub
-; It is important to use the physical address 
+; It is important to use the physical address
 mboot_header:
     dd MBOOT_HEADER_MAGIC
     dd MBOOT_HEADER_FLAGS
@@ -29,8 +28,8 @@ mboot_header:
 
     dd mboot_header
     dd code
-    dd bss
-    dd end
+    dd bss_start
+    dd bss_end
     dd start
 
 align 4*1024
@@ -48,24 +47,28 @@ start:
 
     ; tell the MMU where to find the page directory
     mov ecx, boot_page_dir
-	mov cr3, ecx
+    mov cr3, ecx
 
 
     ; set PSE bit in CR4 to enable 4MiB pages.
-	mov ecx, cr4
-	or ecx, 0x00000010
-	mov cr4, ecx
+    mov ecx, cr4
+    or ecx, 0x00000010
+    mov cr4, ecx
 
 
     ; set PG bit in CR0 to enable paging
-	mov ecx, cr0
-	or ecx, 0x80000000                  
-	mov cr0, ecx
+    mov ecx, cr0
+    or ecx, 0x80000000
+    mov cr0, ecx
 
     ; jump into higher half Yey
     jmp up
 
 section .text
+
+extern multiboot_ptr
+extern multiboot_sig
+extern kernel_main
 
 up:
     ; delete the identety  mapped entry
@@ -78,10 +81,13 @@ up:
     ; correct the pointer to mboot structure
     add ebx, KERNEL_BASE
 
-    ; push the arguments to main on the stack
-    push kernel_stack.top
-    push ebx
-    call main
+    ; store the pointer to mboot structure
+    mov dword [multiboot_ptr], ebx
+
+    ; store the multiboot signature
+    mov dword [multiboot_sig], eax
+
+    call kernel_main
 
 .halt:
     hlt
