@@ -1,4 +1,7 @@
+#include "stdint.h"
+#include "stddef.h"
 #include "kernel/kernel.h"
+#include "kernel/multiboot.h"
 
 void init_multiboot()
 {

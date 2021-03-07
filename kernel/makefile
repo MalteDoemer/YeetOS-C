@@ -2,6 +2,7 @@
 OBJECTS=\
 main.o \
 multiboot.o \
+tty.o \
 
 kernel.a: $(OBJECTS)
 	$(AR) -rcs $(LD_FLAGS) -o $@ $(OBJECTS)

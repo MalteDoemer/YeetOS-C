@@ -1,11 +1,12 @@
 
 OBJECTS=\
 entry.o \
+init.o \
 
 arch.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)
 
-%.o: %.cpp
+%.o: %.c
 	$(CC) $(CPP_FLAGS) -MMD -c -o $@ $<
 
 %.o: %.asm
