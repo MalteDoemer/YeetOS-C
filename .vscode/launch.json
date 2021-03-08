@@ -8,7 +8,7 @@
             "name": "Debug",
             "type": "gdb",
             "request": "attach",
-            "target": "192.168.2.31:9000",
+            "target": "10.162.196.221:9000", //"192.168.2.31:9000",
             "remote": true,
             "cwd": "${workspaceRoot}",
             "gdbpath": "/usr/bin/gdb",

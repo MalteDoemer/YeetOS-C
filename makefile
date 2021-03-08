@@ -18,6 +18,7 @@ export LD_FLAGS=
 DEFINES=__KERNEL__ ARCH=$(ARCH)
 DEFINES := $(patsubst %,-D%,$(DEFINES))
 export CPP_FLAGS := $(CPP_FLAGS) $(DEFINES)
+export C_FLAGS := $(C_FLAGS) $(DEFINES)
 
 
 IMAGE=$(abspath disk.img)
@@ -32,8 +33,9 @@ arch/$(ARCH)/arch.a \
 
 ARCHIVES=\
 libc/libc.a\
+drivers/drivers.a
 
-SUBDIRS=arch/$(ARCH) kernel libc
+SUBDIRS=arch/$(ARCH) kernel libc drivers
 
 
 YeetOS: subdirs

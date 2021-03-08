@@ -15,6 +15,8 @@ int printf(char* fmt, ...)
     size_t chars = vsnprintf(buf, sizeof(buf), fmt, va);
     va_end(va);
 
+    vga_text_write(buf, chars);
+
 
 #endif
 }

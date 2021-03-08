@@ -1,11 +1,8 @@
 
 OBJECTS=\
-memcpy.o \
-memset.o \
-vsnprintf.o \
-printf.o \
+vga_text.o \
 
-libc.a: $(OBJECTS)
+drivers.a: $(OBJECTS)
 	$(AR) -rcs $(LD_FLAGS) -o $@ $(OBJECTS)
 
 %.o: %.cpp
@@ -15,6 +12,6 @@ libc.a: $(OBJECTS)
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<
 
 clean:
-	rm -f libc.a $(OBJECTS) $(OBJECTS:.o=.d)
+	rm -f drivers.a $(OBJECTS) $(OBJECTS:.o=.d)
 
 -include $(OBJECTS:.o=.d)
