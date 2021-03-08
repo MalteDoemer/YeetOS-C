@@ -1,6 +1,7 @@
 
 OBJECTS=\
 entry.o \
+init.o \
 
 arch.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)
