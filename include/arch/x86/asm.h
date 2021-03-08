@@ -27,6 +27,24 @@ static inline uint16_t inw(uint16_t port)
     return ret;
 }
 
+
+static inline void stosb(void* buf, uint16_t val, uint32_t count)
+{
+    __asm ("rep stosw" : : "a"(val), "c"(count), "D"(buf));
+}
+
+
+static inline void stosw(void* buf, uint16_t val, uint32_t count)
+{
+    __asm ("rep stosw" : : "a"(val), "c"(count), "D"(buf));
+}
+
+static inline void stosd(void* buf, uint32_t val, uint32_t count)
+{
+    __asm ("rep stosd" : : "a"(val), "c"(count), "D"(buf));
+}
+
+
 static inline void cli()
 {
     __asm("cli");

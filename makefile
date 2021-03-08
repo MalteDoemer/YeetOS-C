@@ -29,13 +29,13 @@ KERNEL=YeetOS
 
 OBJECTS=\
 kernel/kernel.a \
-arch/$(ARCH)/arch.a \
+arch/$(ARCH)/kernel/kernel.a \
 
 ARCHIVES=\
 libc/libc.a\
-drivers/drivers.a
+arch/$(ARCH)/drivers/drivers.a \
 
-SUBDIRS=arch/$(ARCH) kernel libc drivers
+SUBDIRS=arch/$(ARCH)/kernel arch/$(ARCH)/drivers kernel libc
 
 
 YeetOS: subdirs

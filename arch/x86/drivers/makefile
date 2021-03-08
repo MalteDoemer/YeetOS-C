@@ -3,13 +3,13 @@ OBJECTS=\
 vga_text.o \
 
 drivers.a: $(OBJECTS)
-	$(AR) -rcs $(LD_FLAGS) -o $@ $(OBJECTS)
-
-%.o: %.cpp
-	$(CC) $(CPP_FLAGS) -MMD -c -o $@ $<
+	$(AR) -rcs -o $@ $(OBJECTS)
 
 %.o: %.c
-	$(CC) $(C_FLAGS) -MMD -c -o $@ $<
+	$(CC) $(CPP_FLAGS) -MMD -c -o $@ $<
+
+%.o: %.asm
+	$(AS) $(AS_FLAGS) -o $@ $<
 
 clean:
 	rm -f drivers.a $(OBJECTS) $(OBJECTS:.o=.d)

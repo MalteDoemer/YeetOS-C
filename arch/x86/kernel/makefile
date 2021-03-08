@@ -1,8 +1,9 @@
 
 OBJECTS=\
 entry.o \
+setup.o \
 
-arch.a: $(OBJECTS)
+kernel.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)
 
 %.o: %.c
@@ -12,6 +13,6 @@ arch.a: $(OBJECTS)
 	$(AS) $(AS_FLAGS) -o $@ $<
 
 clean:
-	rm -f arch.a $(OBJECTS) $(OBJECTS:.o=.d)
+	rm -f kernel.a $(OBJECTS) $(OBJECTS:.o=.d)
 
 -include $(OBJECTS:.o=.d)
