@@ -5,4 +5,5 @@ YeetOS
 *.bin
 .clang-format
 disk.img
+test.py
 /old
