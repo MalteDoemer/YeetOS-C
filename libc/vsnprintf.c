@@ -3,6 +3,8 @@
 #include "stdbool.h"
 #include "stdarg.h"
 
+#include "libc/ctype.h"
+
 #define FLAGS_ZEROPAD 1  /* pad with zeroS */
 #define FLAGS_SIGN 2     /* unsigned/signed */
 #define FLAGS_PLUS 4     /* show plus positive */
@@ -50,16 +52,11 @@ static size_t strlen_s(const char* str, size_t maxlen)
     return i;
 }
 
-static inline bool is_digit(char c)
-{
-    return (c >= '0') && (c <= '9');
-}
-
 static size_t atoi_skip(const char** s)
 {
     size_t i = 0;
 
-    while (is_digit(**s)) {
+    while (isdigit(**s)) {
         i = i * 10 + **s - '0';
         (*s)++;
     }
@@ -245,7 +242,7 @@ size_t vsnprintf_impl(out_func_t out, char* buffer, size_t maxlen, const char* f
         }
 
         // evaluate the width field
-        if (is_digit(*fmt)) {
+        if (isdigit(*fmt)) {
             width = atoi_skip(&fmt);
         } else if (*fmt == '*') {
             int w = va_arg(va, int);
@@ -262,7 +259,7 @@ size_t vsnprintf_impl(out_func_t out, char* buffer, size_t maxlen, const char* f
         if (*fmt == '.') {
             fmt++;
 
-            if (is_digit(*fmt)) {
+            if (isdigit(*fmt)) {
                 precision = atoi_skip(&fmt);
             } else if (*fmt == '*') {
                 precision = va_arg(va, int);

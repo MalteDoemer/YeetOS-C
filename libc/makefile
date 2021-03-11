@@ -4,6 +4,8 @@ memcpy.o \
 memset.o \
 vsnprintf.o \
 printf.o \
+isdigit.o \
+isalpha.o \
 
 libc.a: $(OBJECTS)
 	$(AR) -rcs $(LD_FLAGS) -o $@ $(OBJECTS)

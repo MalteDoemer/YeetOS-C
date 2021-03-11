@@ -1,8 +1,9 @@
 #include "stdint.h"
 #include "stddef.h"
 #include "stdbool.h"
-#include "stdio.h"
-#include "string.h"
+
+#include "libc/stdio.h"
+#include "libc/string.h"
 
 #include "arch/x86/asm.h"
 #include "kernel/kernel.h"

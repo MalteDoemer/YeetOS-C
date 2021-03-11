@@ -39,7 +39,9 @@ SUBDIRS=arch/$(ARCH)/kernel arch/$(ARCH)/drivers kernel libc
 
 
 YeetOS: subdirs
-	$(LD) -T arch/$(ARCH)/link.ld $(LD_FLAGS) --whole-archive $(OBJECTS) --no-whole-archive $(ARCHIVES) -o YeetOS
+	$(LD) -T arch/$(ARCH)/link.ld $(LD_FLAGS) --whole-archive $(OBJECTS)  $(ARCHIVES) -o YeetOS
+
+#--no-whole-archive
 
 subdirs: 
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done
