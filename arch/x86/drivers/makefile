@@ -6,7 +6,7 @@ drivers.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)
 
 %.o: %.c
-	$(CC) $(CPP_FLAGS) -MMD -c -o $@ $<
+	$(CC) $(C_FLAGS) -MMD -c -o $@ $<
 
 %.o: %.asm
 	$(AS) $(AS_FLAGS) -o $@ $<

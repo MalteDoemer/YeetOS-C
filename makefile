@@ -1,23 +1,20 @@
 
+#options
 
-export ARCH=x86
+export ARCH= x86
+export MAKE= make --no-print-directory
+export CC= i686-elf-gcc
+export LD= i686-elf-ld -m elf_i386
+export AR= i686-elf-ar
+export AS= nasm -f elf32
 
-export MAKE=make --no-print-directory
-
-export CC=i686-elf-gcc
-export LD=i686-elf-ld -m elf_i386
-export AR=i686-elf-ar
-export AS=nasm -f elf32
-
-export CPP_FLAGS := -O2 -ggdb -ffreestanding -nostdlib -fno-leading-underscore -I $(abspath include) $(CPP_FLAGS)
-export C_FLAGS :=-ggdb -ffreestanding -nostdlib -std=c99 -I $(abspath include) $(C_FLAGS)
-export AS_FLAGS:= $(AS_FLAGS)
-export LD_FLAGS:= $(LD_FLAGS)
+export C_FLAGS  := -ggdb -ffreestanding -nostdlib -std=c99 -I $(abspath include) $(C_FLAGS)
+export AS_FLAGS := $(AS_FLAGS)
+export LD_FLAGS := $(LD_FLAGS)
 
 
-DEFINES=__KERNEL__ ARCH=$(ARCH)
+DEFINES := __KERNEL__ ARCH=$(ARCH) $(DEFINES)
 DEFINES := $(patsubst %,-D%,$(DEFINES))
-export CPP_FLAGS := $(CPP_FLAGS) $(DEFINES)
 export C_FLAGS := $(C_FLAGS) $(DEFINES)
 
 
