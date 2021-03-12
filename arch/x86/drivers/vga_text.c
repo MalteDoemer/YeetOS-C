@@ -16,7 +16,7 @@
 #define MAX_ARGS 16
 
 static int32_t pos = 0;
-static uint8_t attrs = 0x1F;
+static uint8_t attrs = 0x0F;
 static uint16_t* vram = (uint16_t*)SCREEN_START;
 
 static void update_cursor()
@@ -56,36 +56,35 @@ static void scroll_down(uint32_t lines)
 
 static inline void check_scroll()
 {
-    // if (pos < 0) {
-    //     scroll_up(-pos / SCREEN_WIDTH + 1);
-    // } else if (pos >= SCREEN_WIDTH * SCREEN_HEIGHT) {
-    //     scroll_down(pos / SCREEN_WIDTH + 1);
-    // }
 }
 
+static inline void clear_screen()
+{
+    stosw((void*)SCREEN_START, (attrs << 8) | ' ', (SCREEN_END - SCREEN_START) / 2);
+}
 
 static inline void show_cursor()
 {
-    outb(0x3D4, 0x9); // max scan line register -> set char height
-    outb(0x3D5, 0x0F);
+    outb(0x3D4, 0x09);
+    outb(0x3D5, 0x0F); // max scan line register -> set char height
 
-    outb(0x3D4, 11); // cursor end line
-    outb(0x3D5, 0x0F);
+    outb(0x3D4, 0x0B);
+    outb(0x3D5, 15); // cursor end line
 
-    outb(0x3D4, 10); // cursor start line
-    outb(0x3D5, 0x0E);
+    outb(0x3D4, 0x0A);
+    outb(0x3D5, 14); // cursor start line
 }
 
 static inline void hide_cursor()
 {
-    outb(0x3D4, 0x9); // max scan line register -> set char height
-    outb(0x3D5, 0x0F);
+    outb(0x3D4, 0x09);
+    outb(0x3D5, 0x0F); // max scan line register -> set char height
 
-    outb(0x3D4, 15); // cursor end line
-    outb(0x3D5, 0x0F);
+    outb(0x3D4, 0x0B);
+    outb(0x3D5, 16); // cursor end line
 
-    outb(0x3D4, 15); // cursor start line
-    outb(0x3D5, 0x0E);
+    outb(0x3D4, 0x0A);
+    outb(0x3D5, 16); // cursor start line
 }
 
 static inline void bell()
@@ -157,9 +156,11 @@ static char* escape(char* buffer)
             buffer++;
         }
 
-        while (argc < MAX_ARGS && isdigit(*buffer)) {
+        while (isdigit(*buffer)) {
 
-            args[argc++] = atoi_skip(&buffer);
+            size_t num = atoi_skip(&buffer);
+            if (argc < MAX_ARGS)
+                args[argc++] = num;
 
             if (*buffer == ';') {
                 buffer++;
@@ -236,7 +237,9 @@ static char* escape(char* buffer)
         } break;
 
         case 'J': {
-
+            if (argc == 0 || argc >= 1 && args[0] == 2) {
+                clear_screen();
+            }
         } break;
 
         case 'K': {
@@ -244,6 +247,25 @@ static char* escape(char* buffer)
         } break;
 
         case 'm': {
+            bool bright = true;
+
+            for (size_t i = 0; i < argc; i++) {
+                size_t num = args[i];
+
+                if (num == 0) { // reset
+                    attrs = 0x0F;
+                } else if (num == 2) { // bright/dark
+                    bright = false;
+                } else if (num == 7) { // inverse
+                    uint8_t lo = attrs & 0xF;
+                    uint8_t hi = (attrs >> 4) & 0xF;
+                    attrs = lo << 4 | hi;
+                } else if (num >= 30 && num <= 37) {
+                    attrs = (attrs & 0xF0) | ((num - 30 + bright * 8) & 0xF);
+                } else if (num >= 40 && num <= 47) {
+                    attrs = ((num - 40 + bright * 8) & 0xF) << 4 | attrs & 0xF;
+                }
+            }
 
         } break;
 
@@ -270,7 +292,7 @@ static char* escape(char* buffer)
 size_t vga_text_write(char* buffer, size_t num)
 {
 
-    if (buffer[num] != 0){
+    if (buffer[num - 1] != 0) {
         // WARN
         return 0;
     }
@@ -315,7 +337,7 @@ size_t vga_text_write(char* buffer, size_t num)
             break;
 
         default:
-            if (*b > ' ') {
+            if (*b >= ' ') {
                 vram[pos++] = (attrs << 8) | *b;
             }
             b++;
