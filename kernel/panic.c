@@ -1,15 +1,15 @@
 
-
+#include "kernel/debug.h"
 #include "kernel/kernel.h"
 #include "kernel/panic.h"
 #include "kernel/cpu.h"
 
 void warn(const char* func, const char* file, int line, const char* msg, ...)
 {
-    printf("Warning: %s:%d in %s():\n", file, line, func);
+    debugf("Warning: %s:%d in %s():\n", file, line, func);
     va_list va;
     va_start(va, msg);
-    vprintf(msg, va);
+    vdebugf(msg, va);
     va_end(va);
 }
 

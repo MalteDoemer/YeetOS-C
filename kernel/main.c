@@ -6,9 +6,10 @@
 #include "libc/string.h"
 #include "libc/assert.h"
 
+#include "kernel/kernel.h"
 #include "kernel/kheap.h"
 #include "kernel/panic.h"
-#include "kernel/kernel.h"
+#include "kernel/debug.h"
 #include "kernel/multiboot.h"
 
 void color_test()
@@ -27,4 +28,6 @@ void kernel_main()
     printf("\033[H");
 
     color_test();
+
+    debugf("Hello to serial console\n");
 }

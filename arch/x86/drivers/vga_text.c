@@ -623,6 +623,11 @@ static uint8_t* escape(uint8_t* buffer)
     return buffer;
 }
 
+void init_vga_text()
+{
+    
+}
+
 size_t vga_text_write(char* buffer, size_t num)
 {
 

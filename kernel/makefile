@@ -4,6 +4,7 @@ main.o \
 multiboot.o \
 panic.o \
 kheap.o \
+debug.o \
 
 kernel.a: $(OBJECTS)
 	$(AR) -rcs $(LD_FLAGS) -o $@ $(OBJECTS)

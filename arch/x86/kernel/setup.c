@@ -10,6 +10,14 @@
 #include "kernel/multiboot.h"
 
 
+// this will be handled by the fs abstraction eventually
+extern void init_serial();
+
+// this will be handled by the fs abstraction eventually
+extern void init_vga_text();
+
 void init_arch()
 {
+    init_serial();
+    init_vga_text();
 }

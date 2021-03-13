@@ -1,6 +1,7 @@
 
 OBJECTS=\
 vga_text.o \
+serial.o \
 
 drivers.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)

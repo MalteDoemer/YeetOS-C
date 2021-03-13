@@ -81,8 +81,10 @@ run: install
 	-drive format=raw,file='\\wsl$$\Ubuntu$(IMAGE)',if=ide \
 	-m 512 \
 	-name "YeetOS" \
-	-d cpu_reset \
+	-serial stdio \
 	-monitor stdio
+
+#-d cpu_reset \
 
 debug: install
 	qemu-system-i386.exe \
@@ -90,5 +92,7 @@ debug: install
 	-m 512 \
 	-name "YeetOS" \
 	-S -gdb tcp::9000 \
-	-d cpu_reset \
+	-serial stdio \
 	-monitor stdio
+	
+#-d cpu_reset \
