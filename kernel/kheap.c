@@ -44,7 +44,7 @@ void* kmalloc(size_t size)
 
     size_t cap = ALIGN(size, sizeof(void*)) + HEAP_SIZE_THRESHOLD;
 
-    while (block && block->size && block->cap < size)
+    while (block && (block->size || block->cap < size))
         block = block->next;
 
     if (!block)

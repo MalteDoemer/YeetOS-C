@@ -4,12 +4,12 @@
 
 #include "libc/stdio.h"
 #include "libc/string.h"
+#include "libc/assert.h"
 
 #include "kernel/kheap.h"
 #include "kernel/panic.h"
 #include "kernel/kernel.h"
 #include "kernel/multiboot.h"
-
 
 void color_test()
 {
@@ -25,12 +25,6 @@ void kernel_main()
     printf("\033[?25l");
     printf("\033[J");
     printf("\033[H");
+
     color_test();
-
-    char* buf = kmalloc(5);
-    memcpy(buf, "fett", 5);
-    
-    printf("%s\n", buf);
-
-    kfree(buf);
 }
