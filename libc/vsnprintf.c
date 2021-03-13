@@ -102,6 +102,8 @@ static size_t fromat_number32(
             sign = '+';
         } else if (flags & FLAGS_SPACE) {
             sign = ' ';
+        } else {
+            sign = 0;
         }
     } else {
         sign = 0;

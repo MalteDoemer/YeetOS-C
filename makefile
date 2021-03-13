@@ -8,7 +8,7 @@ export LD= i686-elf-ld -m elf_i386
 export AR= i686-elf-ar
 export AS= nasm -f elf32
 
-export C_FLAGS  := -Wall -ggdb -ffreestanding -nostdlib -std=c99 -I $(abspath include) $(C_FLAGS)
+export C_FLAGS  := -O2 -Wall -ggdb -ffreestanding -nostdlib -std=c99 -I $(abspath include) $(C_FLAGS)
 export AS_FLAGS := $(AS_FLAGS)
 export LD_FLAGS := $(LD_FLAGS)
 

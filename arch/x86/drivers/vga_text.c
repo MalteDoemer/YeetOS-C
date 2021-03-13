@@ -27,8 +27,266 @@ typedef struct vga_color_t {
 } vga_color_t;
 
 static int32_t pos = 0;
-static vga_color_t attrs = { 0x0F };
+static vga_color_t attrs = { {0x0F} };
 static uint16_t* vram = (uint16_t*)SCREEN_START;
+
+uint8_t ansi_to_vga[256] = {
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    '\b',
+    '\t',
+    '\n',
+    '\v',
+    '\f', 
+    '\r', 
+    0, 
+    0, 
+    0, 
+    0, 
+    0, 
+    0, 
+    0, 
+    0, 
+    0, 
+    0, 
+    0, 
+    0, 
+    0, 
+    '\e', 
+    0, 
+    0, 
+    0, 
+    0,
+    ' ', 
+    '!', 
+    '"', 
+    '#', 
+    '$', 
+    '%', 
+    '&', 
+    '\'', 
+    '(', ')',
+    '*',
+    '+', 
+    ',', 
+    '-',
+    '.',
+    '/',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7', 
+    '8', 
+    '9', 
+    ':', 
+    ';', 
+    '<', 
+    '=', 
+    '>', 
+    '?', 
+    '@', 
+    'A', 
+    'B', 
+    'C', 
+    'D', 
+    'E', 
+    'F', 
+    'G', 
+    'H', 
+    'I', 
+    'J', 
+    'K', 
+    'L', 
+    'M',
+    'N', 
+    'O', 
+    'P', 
+    'Q', 
+    'R', 
+    'S', 
+    'T', 
+    'U', 
+    'V', 
+    'W', 
+    'X', 
+    'Y', 
+    'Z', 
+    '[', 
+    '\\', 
+    ']', 
+    '^', 
+    '_', 
+    '`', 
+    'a', 
+    'b', 
+    'c', 
+    'd',
+    'e', 
+    'f', 
+    'g', 
+    'h', 
+    'i', 
+    'j', 
+    'k', 
+    'l', 
+    'm', 
+    'n', 
+    'o', 
+    'p', 
+    'q', 
+    'r', 
+    's', 
+    't', 
+    'u', 
+    'v', 
+    'w', 
+    'x', 
+    'y', 
+    'z', 
+    '{',
+    '|',
+    '}', 
+    '~', 
+    0,
+    0,   // €
+    0,   //
+    0,   // ‚
+    159, // ƒ
+    0,   // „
+    0,   // …
+    0,   // †
+    0,   // ‡
+    0,   // ˆ
+    0,   // ‰
+    0,   // Š
+    0,   // ‹
+    0,   // Œ
+    0,   //
+    0,   // Ž
+    0,   //
+    0,   //
+    0,   // ‘
+    0,   // ’
+    0,   // “
+    0,   // ”
+    0,   // •
+    0,   // –
+    0,   // —
+    0,   // ˜
+    0,   // ™
+    0,   // š
+    0,   // ›
+    0,   // œ
+    0,   //
+    0,   // ž
+    0,   // Ÿ
+    0,   //
+    173, // ¡
+    155, // ¢
+    156, // £
+    0,   // ¤
+    157, // ¥
+    '|', // ¦
+    22,  // §
+    0,   // ¨
+    0,   // ©
+    166, // ª
+    174, // «
+    170, // ¬
+    0,   // ­
+    0,   // ®
+    0,   // ¯
+    248, // °
+    241, // ±
+    254, // ²
+    0,   // ³
+    0,   // ´
+    230, // µ
+    0,   // ¶
+    249, // ·
+    0,   // ¸
+    0,   // ¹
+    167, // º
+    175, // »
+    172, // ¼
+    171, // ½
+    0,   // ¾
+    168, // ¿
+    0,   // À
+    0,   // Á
+    0,   // Â
+    0,   // Ã
+    142, // Ä
+    143, // Å
+    146, // Æ
+    128, // Ç
+    0,   // È
+    144, // É
+    0,   // Ê
+    0,   // Ë
+    0,   // Ì
+    0,   // Í
+    0,   // Î
+    0,   // Ï
+    0,   // Ð
+    165, // Ñ
+    0,   // Ò
+    0,   // Ó
+    0,   // Ô
+    0,   // Õ
+    153, // Ö
+    0,   // ×
+    0,   // Ø
+    0,   // Ù
+    0,   // Ú
+    0,   // Û
+    154, // Ü
+    0,   // Ý
+    0,   // Þ
+    0,   // ß
+    133, // à
+    160, // á
+    131, // â
+    0,   // ã
+    132, // ä
+    134, // å
+    0,   // æ
+    135, // ç
+    138, // è
+    130, // é
+    136, // ê
+    137, // ë
+    141, // ì
+    161, // í
+    140, // î
+    139, // ï
+    0,   // ð
+    164, // ñ
+    149, // ò
+    162, // ó
+    147, // ô
+    0,   // õ
+    148, // ö
+    246, // ÷
+    237, // ø
+    151, // ù
+    163, // ú
+    150, // û
+    129, // ü
+    0,   // ý
+    0,   // þ
+    152, // ÿ
+};
 
 static void update_cursor()
 {
@@ -71,7 +329,7 @@ static inline void check_scroll()
 
 static inline void clear_screen()
 {
-    stosw((void*)SCREEN_START, (attrs.col << 8) | ' ', (SCREEN_END - SCREEN_START) / 2);
+    stosw((void*)SCREEN_START, (attrs.col << 8) | ansi_to_vga[' '], (SCREEN_END - SCREEN_START) / 2);
 }
 
 static inline void show_cursor()
@@ -105,14 +363,14 @@ static inline void bell()
 static inline void backspace()
 {
     pos--;
-    vram[pos] = (attrs.col << 8) | ' ';
+    vram[pos] = (attrs.col << 8) | ansi_to_vga[' '];
 }
 
 static inline void tab()
 {
     int num = pos % TAB_SIZE;
     while (num--) {
-        vram[pos++] = (attrs.col << 8) | ' ';
+        vram[pos++] = (attrs.col << 8) | ansi_to_vga[' '];
     }
 }
 
@@ -128,7 +386,7 @@ static inline void carriage_return()
 
 static inline void del()
 {
-    vram[pos] = (attrs.col << 8) | ' ';
+    vram[pos] = (attrs.col << 8) | ansi_to_vga[' '];
     pos--;
 }
 
@@ -144,7 +402,7 @@ static size_t atoi_skip(const char** s)
     return i;
 }
 
-static char* escape(char* buffer)
+static uint8_t* escape(uint8_t* buffer)
 {
     size_t args[MAX_ARGS];
     memset(args, 0, sizeof(args));
@@ -263,20 +521,6 @@ static char* escape(char* buffer)
             for (size_t i = 0; i < argc; i++) {
                 size_t num = args[i];
 
-                // if (num == 0) { // reset
-                //     attrs = 0x0F;
-                // } else if (num == 2) { // bright/dark
-                //     bright = false;
-                // } else if (num == 7) { // inverse
-                //     uint8_t lo = attrs & 0xF;
-                //     uint8_t hi = (attrs >> 4) & 0xF;
-                //     attrs = lo << 4 | hi;
-                // } else if (num >= 30 && num <= 37) {
-                //     attrs = (attrs & 0xF0) | ((num - 30 + bright * 8) & 0xF);
-                // } else if (num >= 40 && num <= 47) {
-                //     attrs = (((num - 40 + bright * 8) & 0xF) << 4) | (attrs & 0xF);
-                // }
-
                 switch (num) {
                 case 0: // reset
                     attrs.col = 0x0F;
@@ -387,7 +631,7 @@ size_t vga_text_write(char* buffer, size_t num)
         return 0;
     }
 
-    char* b = buffer;
+    uint8_t* b = (uint8_t*)buffer;
 
     while (*b) {
         switch (*b) {
@@ -428,11 +672,11 @@ size_t vga_text_write(char* buffer, size_t num)
 
         default:
             if (*b >= ' ') {
-                vram[pos++] = (attrs.col << 8) | *b;
+                vram[pos++] = (attrs.col << 8) | ansi_to_vga[*b];
             }
             b++;
         }
     }
     update_cursor();
-    return b - buffer;
+    return (uintptr_t)b - (uintptr_t)buffer;
 }

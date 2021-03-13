@@ -21,9 +21,8 @@ void kernel_main()
     init_arch();
 
     printf("\033[?25l");
-    printf("\033[32m");
     printf("\033[J");
     printf("\033[H");
-
     color_test();
+    printf("Sp\344ck");
 }
