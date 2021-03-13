@@ -2,6 +2,7 @@
 OBJECTS=\
 vga_text.o \
 serial.o \
+ps2_keyboard.o \
 
 drivers.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)
