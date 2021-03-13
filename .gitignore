@@ -6,4 +6,5 @@ YeetOS
 .clang-format
 disk.img
 test.py
+test.asm
 /old
