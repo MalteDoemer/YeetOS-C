@@ -4,7 +4,13 @@
 #include "stdint.h"
 #include "stddef.h"
 
+#include "kernel/kernel.h"
 
+void init_kheap();
 
+void* kmalloc(size_t size) MALLOC;
+void* kcmalloc(size_t num, size_t size) MALLOC;
+void* krealloc(void* ptr, size_t newsize) MALLOC;
+void kfree(void* ptr);
 
 #endif // #ifndef KHEAP_H

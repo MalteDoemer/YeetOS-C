@@ -28,9 +28,9 @@ SECTIONS {
       *(COMMON)
       *(.bss)
 
-      heap_start = .;
+      _heap_start = .;
       . += 0x400000;
-      heap_end = .;
+      _heap_end = .;
 
       bss_end = . - 0xC0000000;
    }
