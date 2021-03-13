@@ -5,10 +5,8 @@
 #include "stddef.h"
 #include "stdbool.h"
 
-typedef void (*intr_func_t)(void* cpu_state);
-
 void init_interrupts();
 
-void set_intr_handler(size_t index, intr_func_t handler);
+void set_intr_handler(size_t index, void* handler);
 
 #endif // #ifndef INTERRUPTS_H

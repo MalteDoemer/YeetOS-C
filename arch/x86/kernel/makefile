@@ -3,6 +3,11 @@ OBJECTS=\
 entry.o \
 setup.o \
 cpu.o \
+gdt.o \
+idt.o \
+ints.o \
+interrupts.o \
+exceptions.o \
 
 kernel.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)
