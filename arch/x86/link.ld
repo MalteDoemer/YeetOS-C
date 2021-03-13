@@ -11,6 +11,7 @@ SECTIONS {
       code = . - 0xC0000000;
       *(.text)
 
+      . = ALIGN(8);
       ctors_start = .;
       *(.ctors)
       ctors_end = .;

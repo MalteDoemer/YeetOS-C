@@ -20,7 +20,7 @@
 #define MODEM_STAT 6
 #define SCRATCH 7
 
-void init_serial()
+CONSTRUCTOR void init_serial()
 {
     // disable all interrupts
     outb(COM1 + IER, 0x00);
@@ -47,10 +47,11 @@ static inline int is_transmit_empty()
 
 size_t serial_write(char* buffer, size_t num)
 {
-    
+
     for (size_t n = num; n; n--) {
 
-        while (!is_transmit_empty());
+        while (!is_transmit_empty())
+            ;
 
         outb(COM1, *buffer++);
     }
