@@ -6,6 +6,7 @@
 #include "libc/ctype.h"
 
 #include "arch/x86/asm.h"
+#include "kernel/panic.h"
 #include "kernel/kernel.h"
 
 #define TAB_SIZE 4
@@ -15,8 +16,18 @@
 #define SCREEN_HEIGHT 25
 #define MAX_ARGS 16
 
+typedef struct vga_color_t {
+    union {
+        struct {
+            uint8_t fg : 4;
+            uint8_t bg : 4;
+        };
+        uint8_t col;
+    };
+} vga_color_t;
+
 static int32_t pos = 0;
-static uint8_t attrs = 0x0F;
+static vga_color_t attrs = { 0x0F };
 static uint16_t* vram = (uint16_t*)SCREEN_START;
 
 static void update_cursor()
@@ -60,7 +71,7 @@ static inline void check_scroll()
 
 static inline void clear_screen()
 {
-    stosw((void*)SCREEN_START, (attrs << 8) | ' ', (SCREEN_END - SCREEN_START) / 2);
+    stosw((void*)SCREEN_START, (attrs.col << 8) | ' ', (SCREEN_END - SCREEN_START) / 2);
 }
 
 static inline void show_cursor()
@@ -94,14 +105,14 @@ static inline void bell()
 static inline void backspace()
 {
     pos--;
-    vram[pos] = (attrs << 8) | ' ';
+    vram[pos] = (attrs.col << 8) | ' ';
 }
 
 static inline void tab()
 {
     int num = pos % TAB_SIZE;
     while (num--) {
-        vram[pos++] = (attrs << 8) | ' ';
+        vram[pos++] = (attrs.col << 8) | ' ';
     }
 }
 
@@ -117,7 +128,7 @@ static inline void carriage_return()
 
 static inline void del()
 {
-    vram[pos] = (attrs << 8) | ' ';
+    vram[pos] = (attrs.col << 8) | ' ';
     pos--;
 }
 
@@ -237,7 +248,7 @@ static char* escape(char* buffer)
         } break;
 
         case 'J': {
-            if (argc == 0 || argc >= 1 && args[0] == 2) {
+            if (argc == 0 || (argc >= 1 && args[0] == 2)) {
                 clear_screen();
             }
         } break;
@@ -252,18 +263,97 @@ static char* escape(char* buffer)
             for (size_t i = 0; i < argc; i++) {
                 size_t num = args[i];
 
-                if (num == 0) { // reset
-                    attrs = 0x0F;
-                } else if (num == 2) { // bright/dark
-                    bright = false;
-                } else if (num == 7) { // inverse
-                    uint8_t lo = attrs & 0xF;
-                    uint8_t hi = (attrs >> 4) & 0xF;
-                    attrs = lo << 4 | hi;
-                } else if (num >= 30 && num <= 37) {
-                    attrs = (attrs & 0xF0) | ((num - 30 + bright * 8) & 0xF);
-                } else if (num >= 40 && num <= 47) {
-                    attrs = ((num - 40 + bright * 8) & 0xF) << 4 | attrs & 0xF;
+                // if (num == 0) { // reset
+                //     attrs = 0x0F;
+                // } else if (num == 2) { // bright/dark
+                //     bright = false;
+                // } else if (num == 7) { // inverse
+                //     uint8_t lo = attrs & 0xF;
+                //     uint8_t hi = (attrs >> 4) & 0xF;
+                //     attrs = lo << 4 | hi;
+                // } else if (num >= 30 && num <= 37) {
+                //     attrs = (attrs & 0xF0) | ((num - 30 + bright * 8) & 0xF);
+                // } else if (num >= 40 && num <= 47) {
+                //     attrs = (((num - 40 + bright * 8) & 0xF) << 4) | (attrs & 0xF);
+                // }
+
+                switch (num) {
+                case 0: // reset
+                    attrs.col = 0x0F;
+                    break;
+                case 2: // toggle dim/faint
+                    bright = !bright;
+                    break;
+                case 7: // inverse
+                    attrs = ({ vga_color_t tmp; tmp.bg = attrs.fg; tmp.fg = attrs.bg; tmp; });
+                    break;
+
+                case 30: // black fg
+                    attrs.fg = 0 + bright * 8;
+                    break;
+
+                case 31: // red fg
+                    attrs.fg = 4 + bright * 8;
+                    break;
+
+                case 32: // green fg
+                    attrs.fg = 2 + bright * 8;
+                    break;
+
+                case 33: // yellow fg
+                    attrs.fg = 6 + bright * 8;
+                    break;
+
+                case 34: // blue fg
+                    attrs.fg = 1 + bright * 8;
+                    break;
+
+                case 35: // magenta fg
+                    attrs.fg = 5 + bright * 8;
+                    break;
+
+                case 36: // cyan fg
+                    attrs.fg = 3 + bright * 8;
+                    break;
+
+                case 37: // white fg
+                    attrs.fg = 7 + bright * 8;
+                    break;
+
+                case 40: // black bg
+                    attrs.bg = 0 + bright * 8;
+                    break;
+
+                case 41: // red bg
+                    attrs.bg = 4 + bright * 8;
+                    break;
+
+                case 42: // green bg
+                    attrs.bg = 2 + bright * 8;
+                    break;
+
+                case 43: // yellow bg
+                    attrs.bg = 6 + bright * 8;
+                    break;
+
+                case 44: // blue bg
+                    attrs.bg = 1 + bright * 8;
+                    break;
+
+                case 45: // magenta bg
+                    attrs.bg = 5 + bright * 8;
+                    break;
+
+                case 46: // cyan bg
+                    attrs.bg = 3 + bright * 8;
+                    break;
+
+                case 47: // white bg
+                    attrs.bg = 7 + bright * 8;
+                    break;
+
+                default:
+                    break;
                 }
             }
 
@@ -293,7 +383,7 @@ size_t vga_text_write(char* buffer, size_t num)
 {
 
     if (buffer[num - 1] != 0) {
-        // WARN
+        WARN("%s\n", "buffer is not zero terminated");
         return 0;
     }
 
@@ -338,7 +428,7 @@ size_t vga_text_write(char* buffer, size_t num)
 
         default:
             if (*b >= ' ') {
-                vram[pos++] = (attrs << 8) | *b;
+                vram[pos++] = (attrs.col << 8) | *b;
             }
             b++;
         }

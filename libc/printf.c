@@ -3,10 +3,10 @@
 #include "stdarg.h"
 #include "libc/stdio.h"
 
-int printf(char* fmt, ...)
+int printf(const char* fmt, ...)
 {
 #ifdef __KERNEL__
-    extern void vga_text_write(char* buffer, size_t num);
+    extern size_t vga_text_write(char* buffer, size_t num);
 
     char buf[1024];
 
@@ -16,8 +16,21 @@ int printf(char* fmt, ...)
     va_end(va);
 
     // num is the size of the buffer including zero terminator
-    vga_text_write(buf, chars + 1);
+    return (int)vga_text_write(buf, chars + 1);
+#endif
+}
 
+int vprintf(const char* fmt, va_list va)
+{
+#ifdef __KERNEL__
+    extern size_t vga_text_write(char* buffer, size_t num);
+
+    char buf[1024];
+
+    size_t chars = vsnprintf(buf, sizeof(buf), fmt, va);
+
+    // num is the size of the buffer including zero terminator
+    return (int)vga_text_write(buf, chars + 1);
 
 #endif
 }

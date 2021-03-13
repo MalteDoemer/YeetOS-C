@@ -2,7 +2,7 @@
     "debug.allowBreakpointsEverywhere": true,
     "files.associations": {
         "*.config": "makefile",
-        "*.h": "cpp",
+        "*.h": "c",
         "*.asm": "nasm",
         "*.Z80": "asm-collection",
         "string": "cpp",

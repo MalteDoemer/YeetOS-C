@@ -8,7 +8,8 @@ extern "C" {
 #endif
 
 
-int printf(char* fmt, ...);
+int printf(const char* fmt, ...);
+int vprintf(const char* fmt, va_list va);
 int sprintf(char* buffer, const char* fmt, ...);
 int snprintf(char* buffer, size_t count, const char* fmt, ...);
 int vsprintf(char* buffer, const char* fmt, va_list va);

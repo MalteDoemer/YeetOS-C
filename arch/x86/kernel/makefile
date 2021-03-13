@@ -2,6 +2,7 @@
 OBJECTS=\
 entry.o \
 setup.o \
+cpu.o \
 
 kernel.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)

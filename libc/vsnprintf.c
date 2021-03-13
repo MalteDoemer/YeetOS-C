@@ -122,7 +122,7 @@ static size_t fromat_number32(
     }
 
     if (value == 0)
-        tmp[0] == '0';
+        tmp[0] = '0';
 
     for (i = 0; value; i++) {
         tmp[i] = digits[value % base];
