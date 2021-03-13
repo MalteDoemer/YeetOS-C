@@ -10,7 +10,7 @@
 #include "kernel/kheap.h"
 #include "kernel/panic.h"
 #include "kernel/debug.h"
-#include "kernel/multiboot.h"
+#include "kernel/interrupts.h"
 
 void color_test()
 {
@@ -19,9 +19,9 @@ void color_test()
 
 void kernel_main()
 {
-    init_multiboot();
-    init_arch();
     init_kheap();
+    init_arch();
+    init_interrupts();
 
     printf("\033[?25l");
     printf("\033[J");

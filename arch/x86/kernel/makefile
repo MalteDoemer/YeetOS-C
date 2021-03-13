@@ -2,6 +2,7 @@
 OBJECTS=\
 entry.o \
 setup.o \
+multiboot.o \
 cpu.o \
 gdt.o \
 idt.o \

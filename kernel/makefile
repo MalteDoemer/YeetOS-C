@@ -1,7 +1,6 @@
 
 OBJECTS=\
 main.o \
-multiboot.o \
 panic.o \
 kheap.o \
 debug.o \

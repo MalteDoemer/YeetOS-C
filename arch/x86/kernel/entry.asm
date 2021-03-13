@@ -75,7 +75,7 @@ up:
     mov dword [boot_page_dir + KERNEL_BASE], 0
     invlpg [0]
 
-    mov esp, kernel_stack.top
+    mov esp, kernel_stack_top
     mov ebp, esp
 
     ; correct the pointer to mboot structure
@@ -96,6 +96,10 @@ up:
 
 section .bss
 
+
+[global kernel_stack]
+[global kernel_stack_top]
+
 kernel_stack:
 resb 1024 * 4
-.top:
+kernel_stack_top:

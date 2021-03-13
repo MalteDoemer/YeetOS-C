@@ -2,7 +2,7 @@
 #define MULTIBOOT_H
 
 #include "stdint.h"
-#include "kernel/multiboot.h"
+#include "arch/x86/multiboot.h"
 
 #define MULTIBOOT_FLAGS_MEMORY (1 << 0)
 #define MULTIBOOT_FLAGS_DECICE (1 << 1)

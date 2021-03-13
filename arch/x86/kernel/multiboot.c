@@ -1,7 +1,7 @@
 #include "stdint.h"
 #include "stddef.h"
 #include "kernel/kernel.h"
-#include "kernel/multiboot.h"
+#include "arch/x86/multiboot.h"
 
 void init_multiboot()
 {
