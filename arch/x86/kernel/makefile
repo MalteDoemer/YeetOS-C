@@ -9,6 +9,8 @@ idt.o \
 ints.o \
 interrupts.o \
 exceptions.o \
+paging.o \
+mm.o \
 
 kernel.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)

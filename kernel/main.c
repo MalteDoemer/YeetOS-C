@@ -7,6 +7,7 @@
 #include "libc/assert.h"
 
 #include "kernel/kernel.h"
+#include "kernel/mm.h"
 #include "kernel/cpu.h"
 #include "kernel/kheap.h"
 #include "kernel/panic.h"
@@ -43,8 +44,9 @@ void kernel_main()
     init_interrupts();
 
     call_constructors();
-
     enable_interrupts();
+
+    init_mm();
 
     printf("\033[?25l");
     printf("\033[J");

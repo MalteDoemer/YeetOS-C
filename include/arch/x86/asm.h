@@ -41,7 +41,7 @@ static inline void stosw(void* buf, uint16_t val, uint32_t count)
 
 static inline void stosd(void* buf, uint32_t val, uint32_t count)
 {
-    __asm ("rep stosd" : : "a"(val), "c"(count), "D"(buf));
+    __asm ("rep stosl" : : "a"(val), "c"(count), "D"(buf));
 }
 
 
