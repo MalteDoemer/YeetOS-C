@@ -44,6 +44,10 @@ static inline void stosd(void* buf, uint32_t val, uint32_t count)
     __asm ("rep stosl" : : "a"(val), "c"(count), "D"(buf));
 }
 
+static inline void invlpg(uintptr_t addr)
+{
+    __asm("invlpg %0" : : "m"(addr));
+}
 
 static inline void cli()
 {

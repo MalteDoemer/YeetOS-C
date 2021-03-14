@@ -39,11 +39,12 @@ void init_paging()
 {
     memset(bitmap, 0, sizeof(bitmap));
 
-    // page_dir_t* test_dir = create_page_dir();
-    // map_page(test_dir, KERNEL_BASE, 0, false, true, true);
-    // map_page(test_dir, KERNEL_BASE + 0x400000, 0x400000, false, true, true);
-    // map_page(test_dir, 0, 0, false, true, false);
+    page_dir_t* test_dir = create_page_dir();
+    map_page(test_dir, KERNEL_BASE, 0, false, true, true);
+    map_page(test_dir, KERNEL_BASE + 0x400000, 0x400000, false, true, true);
+    map_page(test_dir, 0, 0, false, true, false);
     // enable_desc((void*)((uintptr_t)test_dir - KERNEL_BASE));
+    free_page_dir(test_dir);
 }
 
 page_dir_t* create_page_dir()
@@ -59,8 +60,16 @@ page_dir_t* create_page_dir()
 
 void free_page_dir(page_dir_t* pd)
 {
+    for (size_t i = 0; i < 1024; i++) {
+        if (pd->entries[i].p && !pd->entries[i].s) {
+            page_table_t* table = (page_table_t*)((pd->entries[i].address << 12) + KERNEL_BASE);
+            stosd(table, 0, sizeof(page_table_t) / 4);
+            free_page_struct(table);
+        }
+    }
 
-    // free_page_struct(pd);
+    stosd(pd, 0, sizeof(page_dir_t) / 4);
+    free_page_struct(pd);
 }
 
 int map_page(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, bool user, bool read_write, bool large)
@@ -86,7 +95,7 @@ int map_page(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, bool user, b
 
         // TODO error checking
         if (pd->entries[pdindex].p) {
-            table = (page_table_t*)(pd->entries[pdindex].address << 12) + KERNEL_BASE;
+            table = (page_table_t*)((pd->entries[pdindex].address << 12) + KERNEL_BASE);
         } else {
             table = alloc_page_struct();
             // TODO handle out of memory
@@ -115,8 +124,24 @@ int map_page(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, bool user, b
 
         table->entries[ptindex].address = physical >> 12;
     }
+
+    return 0;
 }
 
-int unmap_page(page_dir_t* pd, uintptr_t virtual)
+void unmap_page(page_dir_t* pd, uintptr_t virtual)
 {
+    uintptr_t pdindex = virtual >> 22;
+
+    if (!pd->entries[pdindex].p)
+        return;
+
+    if (!pd->entries[pdindex].s) {
+        page_table_t* table = (page_table_t*)((pd->entries[pdindex].address << 12) + KERNEL_BASE);
+        stosd(table, 0, sizeof(page_table_t) / 4);
+        free_page_struct(table);
+    }
+
+    *(uint32_t*)(&pd->entries[pdindex]) = 0;
+
+    invlpg(virtual);
 }

@@ -5,12 +5,6 @@
 #include "stdbool.h"
 #include "kernel/kernel.h"
 
-// #define PAGING_FLAGS_PAGE_SIZE 1
-// #define PAGING_FLAGS_CACHE_DISABLED 2
-// #define PAGING_FLAGS_WRITE_THROUGH 4
-// #define PAGING_FLAGS_USER 8
-// #define PAGING_FLAGS_READ_WRITE 16
-// #define PAGING_FLAGS_GLOBAL 32
 
 typedef struct pd_entry_t {
     uint8_t p : 1;
@@ -54,6 +48,6 @@ page_dir_t* create_page_dir();
 void free_page_dir(page_dir_t* pd);
 
 int map_page(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, bool user, bool read_write, bool large);
-int unmap_page(page_dir_t* pd, uintptr_t virtual);
+void unmap_page(page_dir_t* pd, uintptr_t virtual);
 
 #endif // #ifndef PAGING_H
