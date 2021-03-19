@@ -82,7 +82,7 @@ run: install
 	-m 512 \
 	-name "YeetOS" \
 	-serial stdio \
-	-monitor stdio
+	-k ch \
 
 #-d cpu_reset \
 
@@ -93,6 +93,6 @@ debug: install
 	-name "YeetOS" \
 	-S -gdb tcp::9000 \
 	-serial stdio \
-	-monitor stdio
+	-k ch \
 	
 #-d cpu_reset \

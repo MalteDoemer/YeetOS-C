@@ -17,8 +17,10 @@
 #define MALLOC __attribute__((malloc))
 #define CONSTRUCTOR __attribute__((constructor))
 #define ALIGNED(x) __attribute__((aligned(x)))
+#define SECTION(x) __attribute__((x))
 
-void init_arch();
+#define SYMBOL_VALUE(x) ({ extern x; &x; })
+
 void kernel_main();
 
 #endif // #ifndef KERNEL_H

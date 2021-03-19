@@ -21,11 +21,9 @@ size_t heap_size;
 
 void init_kheap()
 {
-    extern uint8_t _heap_start;
-    extern uint8_t _heap_end;
+    heap_start = SYMBOL_VALUE(_heap_start);
+    heap_end = SYMBOL_VALUE(_heap_end);
 
-    heap_start = (uintptr_t)&_heap_start;
-    heap_end = (uintptr_t)&_heap_end;
     heap_size = heap_end - heap_start;
 
     heap_block_t* blk = (heap_block_t*)heap_start;

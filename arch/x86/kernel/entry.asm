@@ -1,8 +1,8 @@
 bits 32
 
-extern code
-extern bss_start
-extern bss_end
+extern _code
+extern _bss_start
+extern _bss_end
 
 global start
 
@@ -27,9 +27,9 @@ mboot_header:
     dd MBOOT_CHECKSUM
 
     dd mboot_header
-    dd code
-    dd bss_start
-    dd bss_end
+    dd _code
+    dd _bss_start
+    dd _bss_end
     dd start
 
 align 4*1024

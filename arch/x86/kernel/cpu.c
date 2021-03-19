@@ -7,13 +7,3 @@ void halt()
 {
     hlt();
 }
-
-void enable_interrupts() 
-{
-    sti();
-}
-
-void disable_interrupts() 
-{
-    cli();
-}

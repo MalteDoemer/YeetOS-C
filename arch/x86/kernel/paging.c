@@ -13,8 +13,8 @@
 #define PAGE_STRUCT_SIZE (4 * 1024)
 #define BITMAP_SIZE ((NUM_PAGE_STRUCTS) / 8)
 
-uint8_t bitmap[BITMAP_SIZE];
-uint8_t page_structs[NUM_PAGE_STRUCTS * PAGE_STRUCT_SIZE] ALIGNED(4 * 1024);
+static uint8_t bitmap[BITMAP_SIZE];
+static uint8_t page_structs[NUM_PAGE_STRUCTS * PAGE_STRUCT_SIZE] ALIGNED(4 * 1024);
 
 void* alloc_page_struct()
 {
@@ -39,12 +39,12 @@ void init_paging()
 {
     memset(bitmap, 0, sizeof(bitmap));
 
-    page_dir_t* test_dir = create_page_dir();
-    map_page(test_dir, KERNEL_BASE, 0, false, true, true);
-    map_page(test_dir, KERNEL_BASE + 0x400000, 0x400000, false, true, true);
-    map_page(test_dir, 0, 0, false, true, false);
-    // enable_desc((void*)((uintptr_t)test_dir - KERNEL_BASE));
-    free_page_dir(test_dir);
+    // page_dir_t* test_dir = create_page_dir();
+    // map_page(test_dir, KERNEL_BASE, 0, false, true, true);
+    // map_page(test_dir, KERNEL_BASE + 0x400000, 0x400000, false, true, true);
+    // map_page(test_dir, 0, 0, false, true, false);
+    // // enable_desc((void*)((uintptr_t)test_dir - KERNEL_BASE));
+    // free_page_dir(test_dir);
 }
 
 page_dir_t* create_page_dir()

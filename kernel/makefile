@@ -1,6 +1,5 @@
 
 OBJECTS=\
-main.o \
 panic.o \
 kheap.o \
 debug.o \

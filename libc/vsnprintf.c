@@ -217,6 +217,8 @@ size_t vsnprintf_impl(out_func_t out, char* buffer, size_t maxlen, const char* f
         fmt++;
 
         // evaluate the flags field
+        flags = 0;
+
     eval_flags:
         switch (*fmt) {
         case '0':
@@ -244,6 +246,7 @@ size_t vsnprintf_impl(out_func_t out, char* buffer, size_t maxlen, const char* f
         }
 
         // evaluate the width field
+        width = 0;
         if (isdigit(*fmt)) {
             width = atoi_skip(&fmt);
         } else if (*fmt == '*') {
@@ -258,6 +261,7 @@ size_t vsnprintf_impl(out_func_t out, char* buffer, size_t maxlen, const char* f
         }
 
         // evalutate the precision field
+        precision = 0;
         if (*fmt == '.') {
             fmt++;
 
