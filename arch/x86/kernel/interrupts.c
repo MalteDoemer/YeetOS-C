@@ -26,18 +26,21 @@ void isr_handler(regs_t* regs)
         WARN("No interrupt handler for int%#x\n", regs->int_no);
 }
 
-void set_intr_handler(size_t index, void* handler)
+void set_intr_handler(size_t index, intr_func_t handler)
 {
     if (index < 256)
-        handlers[index] = (intr_func_t)handler;
+        handlers[index] = handler;
     else
         WARN("Couldn't add interrupt handler %#x\n", index);
 }
 
+void set_keyboard_int(void* int_handler)
+{
+    set_intr_handler(0x21, (intr_func_t)int_handler);
+}
+
 void init_interrupts()
 {
-    memset(handlers, 0, sizeof(handlers));
-
     set_intr_handler(0, divide_by_zero);
     set_intr_handler(6, invalid_opcode);
     set_intr_handler(8, double_fault);

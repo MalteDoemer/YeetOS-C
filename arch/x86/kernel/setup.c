@@ -19,12 +19,18 @@
 #include "kernel/debug.h"
 #include "kernel/interrupts.h"
 
-
 void color_test()
 {
-    printf("\x1b[30m A \x1b[31m B \x1b[32m C \x1b[33m D \x1b[0m \x1b[34m E \x1b[35m F \x1b[36m G \x1b[37m H \x1b[0m\n");
+    printf("\033[30mA \033[31m B \033[32m C \033[33m D \033[0m \033[34m E \033[35m F \033[36m G \033[37m H \033[0m\n");
 }
 
+void heap_test()
+{
+    int* chars = kmalloc(1024);
+    memcpy(chars, "+--------------------+\n| Welcome to YeetOS! |\n+--------------------+", 69);
+    printf("%s\n\n", chars);
+    kfree(chars);
+}
 
 void call_constructors()
 {
@@ -52,18 +58,16 @@ void kernel_main()
     init_idt();
     init_kheap();
 
+    init_interrupts();
+
+    call_constructors();
+
     printf("\033[?25l");
     printf("\033[J");
     printf("\033[H");
 
-    init_interrupts();
-    call_constructors();
-
-    int* i = kmalloc(sizeof(int));
-    *i = 36;
-    kfree(i);
-
+    heap_test();
     color_test();
 
-    set_esp0(SYMBOL_VALUE(kernel_stack_top));
+    set_esp0((uint32_t)SYMBOL_VALUE(kernel_stack_top));
 }

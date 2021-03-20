@@ -7,6 +7,9 @@
 #define HEAP_MAGIC 0x69365420
 #define HEAP_SIZE_THRESHOLD 0
 
+#define HEAP_SIZE 1 * 1024 * 1024
+uint8_t heap_mem[HEAP_SIZE] SECTION(".heap");
+
 typedef struct heap_block_t {
     uint32_t magic;
     struct heap_block_t* prev;
@@ -21,10 +24,9 @@ size_t heap_size;
 
 void init_kheap()
 {
-    heap_start = SYMBOL_VALUE(_heap_start);
-    heap_end = SYMBOL_VALUE(_heap_end);
-
-    heap_size = heap_end - heap_start;
+    heap_start = (uintptr_t)&heap_mem;
+    heap_size = sizeof(heap_mem);
+    heap_end = heap_start + heap_size;
 
     heap_block_t* blk = (heap_block_t*)heap_start;
 

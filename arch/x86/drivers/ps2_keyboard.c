@@ -355,9 +355,6 @@ void keyboard_handler(regs_t* regs)
 
 CONSTRUCTOR void init_keyboard()
 {
-    memset(keystates, 0, sizeof(keystates));
-
-    // this will be replaced by tty abstraction
-    set_intr_handler(0x21, keyboard_handler);
+    set_keyboard_int(keyboard_handler);
     mask_irq(1, false);
 }

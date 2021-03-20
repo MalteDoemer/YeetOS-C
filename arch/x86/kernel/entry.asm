@@ -4,6 +4,10 @@ extern _code
 extern _bss_start
 extern _bss_end
 
+extern pt_bitmap
+extern page_structs
+extern _kernel_size_a
+
 global start
 
 section .mboot
@@ -32,23 +36,44 @@ mboot_header:
     dd _bss_end
     dd start
 
-align 4*1024
+; align 4*1024
 
-boot_page_dir:
-    dd 0x00000083
-    times ((KERNEL_BASE >> 22) - 1) dd 0
-    dd 0x00000083
-    dd 0x00400083
-    times (1024 - (KERNEL_BASE >> 22) - 2) dd 0
+; boot_page_dir:
+;     dd 0x00000083
+;     times ((KERNEL_BASE >> 22) - 1) dd 0
+;     dd 0x00000083
+;     dd 0x00400083
+;     times (1024 - (KERNEL_BASE >> 22) - 2) dd 0
 
 start:
     cli
     cld
 
-    ; tell the MMU where to find the page directory
-    mov ecx, boot_page_dir
-    mov cr3, ecx
+    ; pt_bitmap is used to keep track of all paging structures
+    mov dword [pt_bitmap - KERNEL_BASE], 0x1
 
+    ; map the first 4 MiB to address 0x00
+    mov dword [page_structs - KERNEL_BASE], 0x00000083
+
+
+
+    ; map the kernel image into higher half
+    mov ecx, _kernel_size_a
+    shr ecx, 22
+
+    mov edi, (page_structs - KERNEL_BASE) + ((KERNEL_BASE >> 22) * 4)
+    mov edx, 0x00000083
+
+.fill_pd:
+    mov dword [edi], edx
+    add edx, 0x400000
+    add edi, 4
+    loop .fill_pd
+
+
+    ; tell the MMU where to find the page directory
+    mov ecx, page_structs - KERNEL_BASE
+    mov cr3, ecx
 
     ; set PSE bit in CR4 to enable 4MiB pages.
     mov ecx, cr4
@@ -72,7 +97,7 @@ extern kernel_main
 
 up:
     ; delete the identety  mapped entry
-    mov dword [boot_page_dir + KERNEL_BASE], 0
+    mov dword [page_structs], 0
     invlpg [0]
 
     mov esp, kernel_stack_top

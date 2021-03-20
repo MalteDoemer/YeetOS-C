@@ -23,20 +23,24 @@ SECTIONS {
       *(.data)
    }
 
-   .bss ALIGN (4K) : AT(ADDR(.bss) - 0xC0000000) {
-      _bss_start = . - 0xC0000000;
+   .bss ALIGN (4K) (NOLOAD) : AT(ADDR(.bss) - 0xC0000000) {
 
+      _bss_start = . - 0xC0000000;
       *(COMMON)
       *(.bss)
-
-      _heap_start = .;
-      . += 0x400000;
-      _heap_end = .;
-
       _bss_end = . - 0xC0000000;
+
+   
+      . = ALIGN(4K);
+
+      *(.page_structs)      
+      *(.page_bitmap)
+      *(.heap)
    }
+
 
    _kernel_end_virt = .;
    _kernel_end_phys = . - 0xC0000000;
    _kernel_size = . - 0xC0100000;
+   _kernel_size_a = ALIGN(4M) - 0xC0000000;
 }

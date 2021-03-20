@@ -11,16 +11,15 @@
 
 #define NUM_PAGE_STRUCTS 1024
 #define PAGE_STRUCT_SIZE (4 * 1024)
-#define BITMAP_SIZE ((NUM_PAGE_STRUCTS) / 8)
 
-static uint8_t bitmap[BITMAP_SIZE];
-static uint8_t page_structs[NUM_PAGE_STRUCTS * PAGE_STRUCT_SIZE] ALIGNED(4 * 1024);
+uint32_t pt_bitmap[NUM_PAGE_STRUCTS / 32];
+uint8_t page_structs[NUM_PAGE_STRUCTS * PAGE_STRUCT_SIZE] SECTION(".page_structs");
 
 void* alloc_page_struct()
 {
     for (size_t i = 0; i < NUM_PAGE_STRUCTS; i++) {
-        if (TEST_BIT(bitmap[i / 8], i % 8) == 0) {
-            SET_BIT(bitmap[i / 8], i % 8);
+        if (TEST_BIT(pt_bitmap[i / 8], i % 8) == 0) {
+            SET_BIT(pt_bitmap[i / 8], i % 8);
             return page_structs + i * PAGE_STRUCT_SIZE;
         }
     }
@@ -31,20 +30,12 @@ void free_page_struct(void* ptr)
 {
     size_t i = ((uintptr_t)ptr - (uintptr_t)page_structs) / PAGE_STRUCT_SIZE;
     if (i < NUM_PAGE_STRUCTS) {
-        CLEAR_BIT(bitmap[i / 8], i % 8);
+        CLEAR_BIT(pt_bitmap[i / 8], i % 8);
     }
 }
 
 void init_paging()
 {
-    memset(bitmap, 0, sizeof(bitmap));
-
-    // page_dir_t* test_dir = create_page_dir();
-    // map_page(test_dir, KERNEL_BASE, 0, false, true, true);
-    // map_page(test_dir, KERNEL_BASE + 0x400000, 0x400000, false, true, true);
-    // map_page(test_dir, 0, 0, false, true, false);
-    // // enable_desc((void*)((uintptr_t)test_dir - KERNEL_BASE));
-    // free_page_dir(test_dir);
 }
 
 page_dir_t* create_page_dir()

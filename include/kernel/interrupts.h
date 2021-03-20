@@ -6,6 +6,7 @@
 #include "stdbool.h"
 
 void init_interrupts();
-void set_intr_handler(size_t index, void* handler);
+
+void set_keyboard_int(void* int_handler);
 
 #endif // #ifndef INTERRUPTS_H

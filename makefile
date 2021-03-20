@@ -81,7 +81,7 @@ run: install
 	-drive format=raw,file='\\wsl$$\Ubuntu$(IMAGE)',if=ide \
 	-m 512 \
 	-name "YeetOS" \
-	-serial stdio \
+	-monitor stdio \
 	-k ch \
 
 #-d cpu_reset \
