@@ -5,7 +5,6 @@
 #include "stdbool.h"
 #include "kernel/kernel.h"
 
-
 typedef struct pd_entry_t {
     uint8_t p : 1;
     uint8_t r : 1;
@@ -42,12 +41,26 @@ typedef struct page_dir_t {
     pd_entry_t entries[1024];
 } PACKED page_dir_t;
 
+typedef enum pg_flags_t {
+    PG_USER,
+    PG_WRITABLE,
+    PG_EXECUTABLE,
+} pg_flags_t;
+
 void init_paging();
 
 page_dir_t* create_page_dir();
 void free_page_dir(page_dir_t* pd);
 
-int map_page(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, bool user, bool read_write, bool large);
-void unmap_page(page_dir_t* pd, uintptr_t virtual);
+void map_kernel_pages(page_dir_t* pd);
+
+void map_page_4K(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, pg_flags_t flags);
+void unmap_page_4K(page_dir_t* pd, uintptr_t virtual);
+
+void map_page_4M(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, pg_flags_t flags);
+void unmap_page_4M(page_dir_t* pd, uintptr_t virtual);
+
+
+void activate_pd(page_dir_t* pd);
 
 #endif // #ifndef PAGING_H

@@ -15,6 +15,8 @@
 uint32_t pt_bitmap[NUM_PAGE_STRUCTS / 32];
 uint8_t page_structs[NUM_PAGE_STRUCTS * PAGE_STRUCT_SIZE] SECTION(".page_structs");
 
+page_dir_t* kernel_pd;
+
 void* alloc_page_struct()
 {
     for (size_t i = 0; i < NUM_PAGE_STRUCTS; i++) {
@@ -32,10 +34,6 @@ void free_page_struct(void* ptr)
     if (i < NUM_PAGE_STRUCTS) {
         CLEAR_BIT(pt_bitmap[i / 8], i % 8);
     }
-}
-
-void init_paging()
-{
 }
 
 page_dir_t* create_page_dir()
@@ -63,76 +61,104 @@ void free_page_dir(page_dir_t* pd)
     free_page_struct(pd);
 }
 
-int map_page(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, bool user, bool read_write, bool large)
+void map_page_4K(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, pg_flags_t flags)
 {
-    uintptr_t pdindex = virtual >> 22;
+    uintptr_t pdindex;
+    uintptr_t ptindex;
+    page_table_t* table;
 
-    if (large) {
-        pd->entries[pdindex].s = 1;
-        pd->entries[pdindex].p = 1;
-        pd->entries[pdindex].r = read_write;
-        pd->entries[pdindex].u = user;
+    pdindex = virtual >> 22;
+    ptindex = virtual >> 12 & 0x03FF;
 
-        pd->entries[pdindex].w = 0;
-        pd->entries[pdindex].d = 0;
-        pd->entries[pdindex].a = 0;
-        pd->entries[pdindex].g = 0;
-        pd->entries[pdindex].zero = 0;
-
-        pd->entries[pdindex].address = physical >> 12;
-
-    } else {
-        page_table_t* table;
-
+    if (pd->entries[pdindex].p) {
         // TODO error checking
-        if (pd->entries[pdindex].p) {
-            table = (page_table_t*)((pd->entries[pdindex].address << 12) + KERNEL_BASE);
-        } else {
-            table = alloc_page_struct();
-            // TODO handle out of memory
-            stosd(table, 0, sizeof(page_table_t) / 4);
+        table = (page_table_t*)((pd->entries[pdindex].address << 12) + KERNEL_BASE);
+    } else {
+        // TODO handle out of memory
+        table = alloc_page_struct();
+        memset(table, 0, sizeof(page_table_t));
 
-            pd->entries[pdindex].address = ((uintptr_t)table - KERNEL_BASE) >> 12;
-            pd->entries[pdindex].p = 1;
+        pd->entries[pdindex].address = ((uintptr_t)table - KERNEL_BASE) >> 12;
+        pd->entries[pdindex].p = 1;
 
-            // FIXME is this right ?
-            pd->entries[pdindex].r = 1;
-            pd->entries[pdindex].u = 1;
-        }
-
-        uintptr_t ptindex = virtual >> 12 & 0x03FF;
-
-        table->entries[ptindex].p = 1;
-        table->entries[ptindex].r = read_write;
-        table->entries[ptindex].u = user;
-
-        table->entries[ptindex].w = 0;
-        table->entries[ptindex].c = 0;
-        table->entries[ptindex].a = 0;
-        table->entries[ptindex].d = 0;
-        table->entries[ptindex].g = 0;
-        table->entries[ptindex].zero = 0;
-
-        table->entries[ptindex].address = physical >> 12;
+        // FIXME is this right ?
+        pd->entries[pdindex].r = 1;
+        pd->entries[pdindex].u = 1;
     }
 
-    return 0;
+    table->entries[ptindex].p = 1;
+    table->entries[ptindex].r = flags & PG_WRITABLE;
+    table->entries[ptindex].u = flags & PG_USER;
+    table->entries[ptindex].address = physical >> 12;
 }
 
-void unmap_page(page_dir_t* pd, uintptr_t virtual)
+void unmap_page_4K(page_dir_t* pd, uintptr_t virtual)
 {
-    uintptr_t pdindex = virtual >> 22;
+    uintptr_t pdindex;
+    uintptr_t ptindex;
+    page_table_t* table;
 
-    if (!pd->entries[pdindex].p)
+    pdindex = virtual >> 22;
+    ptindex = virtual >> 12 & 0x03FF;
+
+    if (!pd->entries[pdindex].p && !pd->entries[pdindex].s)
         return;
 
-    if (!pd->entries[pdindex].s) {
-        page_table_t* table = (page_table_t*)((pd->entries[pdindex].address << 12) + KERNEL_BASE);
-        stosd(table, 0, sizeof(page_table_t) / 4);
-        free_page_struct(table);
+    // TODO error checking
+    table = (page_table_t*)((pd->entries[pdindex].address << 12) + KERNEL_BASE);
+
+    memset(&table->entries[ptindex], 0, sizeof(pt_entry_t));
+
+    // check if the page table is empty
+    for (uint32_t i = 0; i < 1024; i++) {
+        if (table->entries[i].p) {
+            return;
+        }
     }
 
-    *(uint32_t*)(&pd->entries[pdindex]) = 0;
+    free_page_struct(table);
+    memset(&pd->entries[pdindex], 0, sizeof(pd_entry_t));
+}
 
-    invlpg(virtual);
+void map_page_4M(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, pg_flags_t flags)
+{
+    uintptr_t pdindex;
+    pdindex = virtual >> 22;
+
+    // TODO check if page already exists
+
+    pd->entries[pdindex].p = 1;
+    pd->entries[pdindex].s = 1;
+    pd->entries[pdindex].r = flags & PG_WRITABLE;
+    pd->entries[pdindex].u = flags & PG_USER;
+    pd->entries[pdindex].address = physical >> 12;
+}
+
+void unmap_page_4M(page_dir_t* pd, uintptr_t virtual)
+{
+    uintptr_t pdindex;
+    pdindex = virtual >> 22;
+
+    // TODO check if page is really 4 MiB
+
+    memset(&pd->entries[pdindex], 0, sizeof(pd_entry_t));
+}
+
+void map_kernel_pages(page_dir_t* pd)
+{
+    for (uint32_t i = 0; i < 1024; i++) {
+        if (kernel_pd->entries[i].p) {
+            pd->entries[i] = kernel_pd->entries[i];
+        }
+    }
+}
+
+void activate_pd(page_dir_t* pd)
+{
+    set_cr3((uint32_t)pd - KERNEL_BASE);
+}
+
+void init_paging()
+{
+    kernel_pd = (page_dir_t*)&page_structs[0];
 }

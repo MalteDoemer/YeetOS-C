@@ -1,6 +1,7 @@
 #include "stdint.h"
 #include "stddef.h"
 
+#include "libc/string.h"
 #include "libc/stdio.h"
 
 #include "arch/x86/asm.h"
@@ -29,7 +30,7 @@ void print_mmap()
     printf("\n");
 }
 
-uint32_t alloc_page()
+uint32_t alloc_page_4K()
 {
     for (uint32_t i = last_page; i < num_pages; i++) {
         if (TEST_BIT(page_bitmap[i / 32], i % 32) == 0) {
@@ -38,17 +39,26 @@ uint32_t alloc_page()
             return i;
         }
     }
-    
+
     return 0;
 }
 
-void free_page(uint32_t page)
+void free_page_4K(uint32_t page)
 {
     CLEAR_BIT(page_bitmap[page / 32], page % 32);
 
-    if (page < last_page){
+    if (page < last_page) {
         last_page = page;
     }
+}
+
+uint32_t alloc_page_4M()
+{
+    
+}
+
+void free_page_4M(uint32_t page)
+{
 }
 
 void init_mm()
@@ -64,4 +74,15 @@ void init_mm()
     last_page = kernel_pages;
 
     init_paging();
+
+    page_dir_t* mypd = create_page_dir();
+    uint32_t phys = alloc_page_4K();
+
+    map_kernel_pages(mypd);
+    map_page_4k(mypd, 0, phys, PG_WRITABLE);
+
+    activate_pd(mypd);
+
+    int* i = NULL;
+    *i = 0x36;
 }

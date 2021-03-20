@@ -2,6 +2,7 @@
 OBJECTS=\
 memcpy.o \
 memset.o \
+memcmp.o \
 vsnprintf.o \
 printf.o \
 isdigit.o \
