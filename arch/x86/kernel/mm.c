@@ -13,7 +13,11 @@
 #include "kernel/debug.h"
 #include "kernel/mm.h"
 
-uint32_t page_bitmap[(1024 * 1024) / 32] SECTION(".page_bitmap");
+#define PAGE_TO_PHYS(x) (x * 4 * 1024)
+
+uint32_t page_bitmap[(1024 * 1024) / 32];
+uint32_t num_pages;
+uint32_t last_page;
 
 void print_mmap()
 {
@@ -25,7 +29,39 @@ void print_mmap()
     printf("\n");
 }
 
+uint32_t alloc_page()
+{
+    for (uint32_t i = last_page; i < num_pages; i++) {
+        if (TEST_BIT(page_bitmap[i / 32], i % 32) == 0) {
+            SET_BIT(page_bitmap[i / 32], i % 32);
+            last_page = i + 1;
+            return i;
+        }
+    }
+    
+    return 0;
+}
+
+void free_page(uint32_t page)
+{
+    CLEAR_BIT(page_bitmap[page / 32], page % 32);
+
+    if (page < last_page){
+        last_page = page;
+    }
+}
+
 void init_mm()
 {
+
+    /* mark all pages allocated by entry.asm as allocated */
+    uint32_t kernel_pages = ((uint32_t)SYMBOL_VALUE(_kernel_size_a)) >> 12;
+    for (uint32_t i = 0; i < kernel_pages; i++) {
+        SET_BIT(page_bitmap[i / 32], i % 32);
+    }
+
+    num_pages = (multiboot_ptr->mem_upper + 1024) / 4;
+    last_page = kernel_pages;
+
     init_paging();
 }

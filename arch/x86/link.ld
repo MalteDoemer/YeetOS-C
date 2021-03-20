@@ -33,8 +33,7 @@ SECTIONS {
    
       . = ALIGN(4K);
 
-      *(.page_structs)      
-      *(.page_bitmap)
+      *(.page_structs)
       *(.heap)
    }
 
