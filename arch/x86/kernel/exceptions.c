@@ -2,10 +2,10 @@
 #include "stddef.h"
 #include "stdbool.h"
 
-#include "arch/x86/asm.h"
-#include "arch/x86/gdt.h"
-#include "arch/x86/idt.h"
-#include "arch/x86/registers.h"
+#include "arch-x86/asm.h"
+#include "arch-x86/gdt.h"
+#include "arch-x86/idt.h"
+#include "arch-x86/registers.h"
 
 #include "kernel/kernel.h"
 #include "kernel/interrupts.h"

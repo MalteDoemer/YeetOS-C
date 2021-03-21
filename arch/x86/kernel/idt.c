@@ -4,9 +4,9 @@
 
 #include "libc/string.h"
 
-#include "arch/x86/asm.h"
-#include "arch/x86/gdt.h"
-#include "arch/x86/idt.h"
+#include "arch-x86/asm.h"
+#include "arch-x86/gdt.h"
+#include "arch-x86/idt.h"
 
 #include "kernel/kernel.h"
 

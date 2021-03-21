@@ -1,11 +1,11 @@
 
 OBJECTS=\
-panic.o \
-kheap.o \
+main.o \
 debug.o \
+panic.o \
 
 kernel.a: $(OBJECTS)
-	$(AR) -rcs $(LD_FLAGS) -o $@ $(OBJECTS)
+	$(AR) -rcs -o $@ $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

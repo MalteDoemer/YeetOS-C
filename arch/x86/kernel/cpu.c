@@ -1,7 +1,4 @@
-
-#include "arch/x86/asm.h"
-#include "kernel/kernel.h"
-#include "kernel/cpu.h"
+#include "arch-x86/asm.h"
 
 void halt()
 {

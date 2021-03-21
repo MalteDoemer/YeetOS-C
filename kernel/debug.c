@@ -3,7 +3,7 @@
 #include "stdint.h"
 #include "stdarg.h"
 
-#include "libc/stdio.h"
+#include "stdio.h"
 #include "kernel/debug.h"
 
 int debugf(const char* fmt, ...)

@@ -2,10 +2,13 @@
 #include "stddef.h"
 #include "stdbool.h"
 
-#include "libc/string.h"
+#include "arch/arch.h"
 
-#include "arch/x86/asm.h"
-#include "kernel/panic.h"
+#if !defined(__X86__)
+#error "serial only supported for x86"
+#endif
+
+#include "arch/asm.h"
 #include "kernel/kernel.h"
 
 #define COM1 0x3F8
@@ -40,7 +43,7 @@ CONSTRUCTOR void init_serial()
     outb(COM1 + MODEM_CTRL, 0x0F);
 }
 
-static inline int is_transmit_empty()
+static inline bool is_transmit_empty()
 {
     return inb(COM1 + LINE_STAT) & 0x20;
 }

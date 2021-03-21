@@ -1,15 +1,15 @@
 
 OBJECTS=\
-memcpy.o \
 memset.o \
 memcmp.o \
+memcpy.o \
 vsnprintf.o \
-printf.o \
 isdigit.o \
 isalpha.o \
+printf.o \
 
 libc.a: $(OBJECTS)
-	$(AR) -rcs $(LD_FLAGS) -o $@ $(OBJECTS)
+	$(AR) -rcs -o $@ $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

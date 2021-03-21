@@ -4,12 +4,16 @@
 
 #include "libc/string.h"
 
-#include "arch/x86/asm.h"
-#include "arch/x86/idt.h"
-#include "arch/x86/registers.h"
+#include "arch/arch.h"
+
+#if !defined(__X86__)
+#error "ps/2 keyboard only supported for x86"
+#endif
+
+#include "arch/asm.h"
+#include "arch/registers.h"
 
 #include "kernel/kernel.h"
-#include "kernel/panic.h"
 #include "kernel/debug.h"
 #include "kernel/interrupts.h"
 
@@ -345,7 +349,6 @@ void keyboard_handler(regs_t* regs)
             keystates[scancode - 0x80] = 0;
         } else {
             keystates[scancode] = 1;
-            debugf("Key '%c' was pressed\n", KEYMAP[scancode]);
         }
     }
 
@@ -356,5 +359,4 @@ void keyboard_handler(regs_t* regs)
 CONSTRUCTOR void init_keyboard()
 {
     set_keyboard_int(keyboard_handler);
-    mask_irq(1, false);
 }

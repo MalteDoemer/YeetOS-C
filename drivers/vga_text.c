@@ -5,9 +5,16 @@
 #include "libc/string.h"
 #include "libc/ctype.h"
 
-#include "arch/x86/asm.h"
-#include "kernel/panic.h"
+#include "arch/arch.h"
+
+#if !defined(__X86__)
+#error "vga text mode only supported for x86"
+#endif
+
+#include "arch/asm.h"
+
 #include "kernel/kernel.h"
+#include "kernel/panic.h"
 
 #define TAB_SIZE 4
 #define SCREEN_START (0xB8000 + KERNEL_BASE)
@@ -315,17 +322,17 @@ static void gotoxy(int32_t x, int32_t y)
     }
 }
 
-static void scroll_up(uint32_t lines)
-{
-}
+// static void scroll_up(uint32_t lines)
+// {
+// }
 
-static void scroll_down(uint32_t lines)
-{
-}
+// static void scroll_down(uint32_t lines)
+// {
+// }
 
-static inline void check_scroll()
-{
-}
+// static inline void check_scroll()
+// {
+// }
 
 static inline void clear_screen()
 {

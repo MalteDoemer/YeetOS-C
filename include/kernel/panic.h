@@ -1,7 +1,6 @@
 #ifndef PANIC_H
 #define PANIC_H
 
-#include "libc/stdio.h"
 #include "kernel/kernel.h"
 
 #define WARN(x, __VA_ARGS) warn(__func__, __FILE__, __LINE__, x, __VA_ARGS)
