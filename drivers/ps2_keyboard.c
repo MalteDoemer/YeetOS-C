@@ -357,7 +357,7 @@ void keyboard_handler(regs_t* regs)
     outb(0x20, 0x20);
 }
 
-CONSTRUCTOR rcode_t init_keyboard()
+CTOR rcode_t init_keyboard()
 {
     set_keyboard_int(keyboard_handler);
     return RCODE_SUCESS;

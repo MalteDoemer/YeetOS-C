@@ -4,6 +4,8 @@
 #include "stdint.h"
 #include "stddef.h"
 
+#include "arch/x86/types.h"
+
 #include "kernel/kernel.h"
 
 typedef void (*intr_func_t)(regs_t* regs);

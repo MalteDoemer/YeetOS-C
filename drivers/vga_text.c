@@ -690,7 +690,7 @@ size_t vga_text_write(char* buffer, size_t num)
     return (uintptr_t)b - (uintptr_t)buffer;
 }
 
-CONSTRUCTOR rcode_t init_vga_text()
+CTOR rcode_t init_vga_text()
 {
     return RCODE_SUCESS;
 }

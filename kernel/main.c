@@ -20,7 +20,7 @@ void heap_test()
     kfree(chars);
 }
 
-void call_constructors()
+void call_ctors()
 {
     typedef rcode_t (*ctor_t)();
 
@@ -45,9 +45,9 @@ void call_constructors()
 
 void kernel_main()
 {
-    init_arch();
     init_kheap();
-    call_constructors();
+    init_arch();
+    call_ctors();
 
     printf("\033[?25l");
     printf("\033[J");
