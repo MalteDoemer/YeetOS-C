@@ -50,18 +50,13 @@ typedef enum pg_flags_t {
 
 rcode_t init_paging();
 
-page_dir_t* create_page_dir();
-void free_page_dir(page_dir_t* pd);
-
-void map_kernel_pages(page_dir_t* pd);
-
-void map_page_4K(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, pg_flags_t flags);
-void unmap_page_4K(page_dir_t* pd, uintptr_t virtual);
-
-void map_page_4M(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, pg_flags_t flags);
-void unmap_page_4M(page_dir_t* pd, uintptr_t virtual);
-
-
-void activate_pd(page_dir_t* pd);
+// page_dir_t* create_page_dir();
+// void free_page_dir(page_dir_t* pd);
+// void map_kernel_pages(page_dir_t* pd);
+// void map_page_4K(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, pg_flags_t flags);
+// void unmap_page_4K(page_dir_t* pd, uintptr_t virtual);
+// void map_page_4M(page_dir_t* pd, uintptr_t virtual, uintptr_t physical, pg_flags_t flags);
+// void unmap_page_4M(page_dir_t* pd, uintptr_t virtual);
+// void activate_pd(page_dir_t* pd);
 
 #endif // #ifndef PAGING_H
