@@ -5,16 +5,17 @@
 #include "libc/string.h"
 #include "libc/ctype.h"
 
-#include "arch/arch.h"
-
-#if !defined(__X86__)
-#error "vga text mode only supported for x86"
-#endif
-
-#include "arch/asm.h"
-
 #include "kernel/kernel.h"
 #include "kernel/panic.h"
+
+#if !defined(__x86__) && !defined(__x64__)
+#error "serial only supported on x86 or x64"
+#endif
+
+#if  defined(__x86__)
+#include "arch/x86/asm.h"
+#endif
+
 
 #define TAB_SIZE 4
 #define SCREEN_START (0xB8000 + KERNEL_BASE)

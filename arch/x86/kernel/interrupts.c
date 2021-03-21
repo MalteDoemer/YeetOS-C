@@ -4,9 +4,10 @@
 
 #include "libc/string.h"
 
-#include "arch-x86/asm.h"
-#include "arch-x86/exceptions.h"
-#include "arch-x86/interrupts.h"
+#include "arch/x86/asm.h"
+#include "arch/x86/types.h"
+#include "arch/x86/exceptions.h"
+#include "arch/x86/interrupts.h"
 
 #include "kernel/kernel.h"
 #include "kernel/panic.h"

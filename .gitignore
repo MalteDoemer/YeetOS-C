@@ -5,5 +5,4 @@ YeetOS
 *.bin
 .clang-format
 disk.img
-/include/arch
 /old

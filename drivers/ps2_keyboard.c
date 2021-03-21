@@ -4,17 +4,19 @@
 
 #include "libc/string.h"
 
-#include "arch/arch.h"
-
-#if !defined(__X86__)
-#error "ps/2 keyboard only supported for x86"
-#endif
-
-#include "arch/asm.h"
-#include "arch/interrupts.h"
-
 #include "kernel/kernel.h"
 #include "kernel/debug.h"
+
+#if !defined(__x86__) && !defined(__x64__)
+#error "ps/2 keyboard only supported on x86 or x64"
+#endif
+
+#ifdef __x86__
+#include "arch/x86/asm.h"
+#include "arch/x86/types.h"
+#include "arch/x86/interrupts.h"
+#endif
+
 
 #define SHIFT_OFFSET 90
 #define ALT_OFFSET 180

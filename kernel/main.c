@@ -3,8 +3,6 @@
 #include "stdio.h"
 #include "string.h"
 
-#include "arch/arch.h"
-
 #include "kernel/kernel.h"
 #include "kernel/kheap.h"
 #include "kernel/panic.h"

@@ -1,9 +1,9 @@
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
 
-#include "arch-x86/interrupts.h"
 
 #include "kernel/kernel.h"
+#include "arch/x86/interrupts.h"
 
 void divide_by_zero(regs_t* regs);
 void invalid_opcode(regs_t* regs);

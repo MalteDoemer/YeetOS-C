@@ -1,8 +1,6 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-#define KERNEL_BASE 0xC0000000
-
 #define SET_BIT(A,B) (A = (A | (1 << (B))))
 #define CLEAR_BIT(A,B) (A = (A & ~(1 << (B))))
 #define TOGGLE_BIT(A,B) (A = (A ^ (1 << (B))))
@@ -27,5 +25,11 @@ typedef enum rcode_t {
 } rcode_t;
 
 void kernel_main();
+
+#if ARCH == x86
+#include "arch/x86/arch.h"
+#else 
+#error "unkonw architecture"
+#endif
 
 #endif // #ifndef KERNEL_H

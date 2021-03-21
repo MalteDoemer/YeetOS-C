@@ -1,7 +1,9 @@
 #include "stdint.h"
 #include "stddef.h"
+
+#include "arch/x86/multiboot.h"
+
 #include "kernel/kernel.h"
-#include "arch-x86/multiboot.h"
 
 rcode_t init_multiboot()
 {

@@ -12,11 +12,12 @@ ARCHIVES=\
 kernel/kernel.a \
 libc/libc.a \
 drivers/drivers.a \
-arch/$(ARCH)/arch.a \
+arch/$(ARCH)/kernel/kernel.a \
+arch/$(ARCH)/boot/boot.a \
 
 LD_SCRIPT = arch/$(ARCH)/link.ld
 
-SUBDIRS= kernel libc drivers arch/$(ARCH)
+SUBDIRS= kernel libc drivers arch/$(ARCH)/kernel arch/$(ARCH)/boot
 
 # should define $(CC) $(LD) $(AS) $(AR) 
 # and respectively $(C_FLAGS) $(LD_FLAGS) $(AS_FLAGS)
@@ -39,19 +40,14 @@ C_FLAGS := $(C_FLAGS) $(DEFINES)
 YeetOS: subdirs
 	$(LD) -T $(LD_SCRIPT) $(LD_FLAGS) --whole-archive $(ARCHIVES) -o $@
 
-subdirs: symlinks
+subdirs:
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done
 
 clean:
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i clean; done
 
-# to correct typos XD
+# to compensate typos XD
 clena: clean
-
-
-symlinks:
-	rm -f include/arch
-	( cd include ; ln -s arch-$(ARCH) arch )
 
 format:
 	scripts/format.sh

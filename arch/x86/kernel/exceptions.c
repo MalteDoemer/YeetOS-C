@@ -2,12 +2,10 @@
 #include "stddef.h"
 #include "stdbool.h"
 
-#include "arch-x86/asm.h"
-#include "arch-x86/gdt.h"
-#include "arch-x86/idt.h"
-#include "arch-x86/interrupts.h"
+#include "arch/x86/types.h"
 
 #include "kernel/kernel.h"
+#include "kernel/cpu.h"
 #include "kernel/panic.h"
 
 void divide_by_zero(regs_t* regs)
@@ -28,13 +26,13 @@ void double_fault(regs_t* regs)
 void invalid_tss(regs_t* regs)
 {
     PANIC("%s", "Invalid TSS");
-    for (;;) hlt();
+    for (;;) halt();
 }
 
 void segment_not_present(regs_t* regs)
 {
     PANIC("%s", "Segfault");
-    for (;;) hlt();
+    for (;;) halt();
 }
 
 void stack_segment_fault(regs_t* regs)

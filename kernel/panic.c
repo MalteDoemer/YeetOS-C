@@ -1,9 +1,9 @@
 #include "stdio.h"
 
-#include "arch/cpu.h"
 
 #include "kernel/kernel.h"
 #include "kernel/panic.h"
+#include "kernel/cpu.h"
 #include "kernel/debug.h"
 
 void warn(const char* func, const char* file, int line, const char* msg, ...)

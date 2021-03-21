@@ -2,14 +2,15 @@
 #include "stddef.h"
 #include "stdbool.h"
 
-#include "arch/arch.h"
+#include "kernel/kernel.h"
 
-#if !defined(__X86__)
-#error "serial only supported for x86"
+#if !defined(__x86__) && !defined(__x64__)
+#error "serial only supported on x86 or x64"
 #endif
 
-#include "arch/asm.h"
-#include "kernel/kernel.h"
+#ifdef __x86__
+#include "arch/x86/asm.h"
+#endif
 
 #define COM1 0x3F8
 
