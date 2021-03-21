@@ -5,16 +5,11 @@
 #include "libc/string.h"
 
 #include "arch-x86/asm.h"
-#include "arch-x86/gdt.h"
-#include "arch-x86/idt.h"
-#include "arch-x86/registers.h"
 #include "arch-x86/exceptions.h"
+#include "arch-x86/interrupts.h"
 
 #include "kernel/kernel.h"
-#include "kernel/interrupts.h"
 #include "kernel/panic.h"
-
-typedef void (*intr_func_t)(regs_t* regs);
 
 static intr_func_t handlers[256];
 

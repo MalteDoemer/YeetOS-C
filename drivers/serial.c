@@ -23,7 +23,7 @@
 #define MODEM_STAT 6
 #define SCRATCH 7
 
-CONSTRUCTOR void init_serial()
+CONSTRUCTOR rcode_t init_serial()
 {
     // disable all interrupts
     outb(COM1 + IER, 0x00);

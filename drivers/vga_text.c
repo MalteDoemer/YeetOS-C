@@ -306,14 +306,14 @@ static void update_cursor()
     outb(0x3D5, p);
 }
 
-static void update_origin()
-{
-    uint32_t org = ((uintptr_t)vram - SCREEN_START);
-    outb(0x3D4, 12);
-    outb(0x3D5, 0xff & (org >> 9));
-    outb(0x3D4, 13);
-    outb(0x3d5, 0xff & (org >> 1));
-}
+// static void update_origin()
+// {
+//     uint32_t org = ((uintptr_t)vram - SCREEN_START);
+//     outb(0x3D4, 12);
+//     outb(0x3D5, 0xff & (org >> 9));
+//     outb(0x3D4, 13);
+//     outb(0x3d5, 0xff & (org >> 1));
+// }
 
 static void gotoxy(int32_t x, int32_t y)
 {
@@ -397,11 +397,11 @@ static inline void del()
     pos--;
 }
 
-static size_t atoi_skip(const char** s)
+static size_t atoi_skip(uint8_t** s)
 {
     size_t i = 0;
 
-    while (isdigit(**s)) {
+    while (isdigit((int)**s)) {
         i = i * 10 + **s - '0';
         (*s)++;
     }

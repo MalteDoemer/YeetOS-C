@@ -45,6 +45,10 @@ subdirs: symlinks
 clean:
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i clean; done
 
+# to correct typos XD
+clena: clean
+
+
 symlinks:
 	rm -f include/arch
 	( cd include ; ln -s arch-$(ARCH) arch )

@@ -5,10 +5,9 @@
 #include "arch-x86/asm.h"
 #include "arch-x86/gdt.h"
 #include "arch-x86/idt.h"
-#include "arch-x86/registers.h"
+#include "arch-x86/interrupts.h"
 
 #include "kernel/kernel.h"
-#include "kernel/interrupts.h"
 #include "kernel/panic.h"
 
 void divide_by_zero(regs_t* regs)

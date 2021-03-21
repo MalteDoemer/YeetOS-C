@@ -19,7 +19,7 @@
 #define ALIGNED(x) __attribute__((aligned(x)))
 #define SECTION(x) __attribute__((section(x)))
 
-#define SYMBOL_VALUE(x) ({ extern void x(); &x; })
+#define SYMBOL_VALUE(x) ({ extern char x; &x; })
 
 typedef enum rcode_t {
    RCODE_SUCESS = 0,

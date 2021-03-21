@@ -11,11 +11,10 @@
 #endif
 
 #include "arch/asm.h"
-#include "arch/registers.h"
+#include "arch/interrupts.h"
 
 #include "kernel/kernel.h"
 #include "kernel/debug.h"
-#include "kernel/interrupts.h"
 
 #define SHIFT_OFFSET 90
 #define ALT_OFFSET 180

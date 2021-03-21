@@ -1,7 +1,8 @@
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
 
-#include "arch-x86/registers.h"
+#include "arch-x86/interrupts.h"
+
 #include "kernel/kernel.h"
 
 void divide_by_zero(regs_t* regs);
