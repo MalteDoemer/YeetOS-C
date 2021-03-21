@@ -5,7 +5,7 @@
 #include "stddef.h"
 #include "stdbool.h"
 
-void init_interrupts();
+rcode_t init_interrupts();
 
 void set_keyboard_int(void* int_handler);
 

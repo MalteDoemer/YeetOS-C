@@ -39,7 +39,7 @@ void set_keyboard_int(void* int_handler)
     set_intr_handler(0x21, (intr_func_t)int_handler);
 }
 
-void init_interrupts()
+rcode_t init_interrupts()
 {
     set_intr_handler(0, divide_by_zero);
     set_intr_handler(6, invalid_opcode);
@@ -49,4 +49,6 @@ void init_interrupts()
     set_intr_handler(12, stack_segment_fault);
     set_intr_handler(13, general_protection_fault);
     set_intr_handler(14, page_fault);
+    
+    return RCODE_SUCESS;
 }

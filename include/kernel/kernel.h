@@ -21,6 +21,11 @@
 
 #define SYMBOL_VALUE(x) ({ extern void x(); &x; })
 
+typedef enum rcode_t {
+   RCODE_SUCESS = 0,
+   RCODE_FAILURE,
+} rcode_t;
+
 void kernel_main();
 
 #endif // #ifndef KERNEL_H

@@ -41,6 +41,8 @@ CONSTRUCTOR void init_serial()
 
     // set OUT1, OUT2, RTS and DSR to inactive
     outb(COM1 + MODEM_CTRL, 0x0F);
+
+    return RCODE_SUCESS;
 }
 
 static inline bool is_transmit_empty()

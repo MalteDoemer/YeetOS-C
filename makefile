@@ -43,7 +43,6 @@ subdirs: symlinks
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done
 
 clean:
-	rm -f include/arch
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i clean; done
 
 symlinks:

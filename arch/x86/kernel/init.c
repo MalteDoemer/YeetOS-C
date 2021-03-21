@@ -1,6 +1,6 @@
+#include "kernel/kernel.h"
 
-
-void init_arch()
+rcode_t init_arch()
 {
-
+    return RCODE_SUCESS;
 }

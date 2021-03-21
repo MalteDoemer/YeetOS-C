@@ -26,7 +26,7 @@ static void set_gdt_entry(int index, uint32_t base, uint32_t limit, uint8_t acce
     gdt[index].flags = flags & 0xF;
 }
 
-void init_gdt()
+rcode_t init_gdt()
 {
     set_gdt_entry(1, 0, 0xFFFFF, 0x9A, 0xC);
     set_gdt_entry(2, 0, 0xFFFFF, 0x92, 0xC);
@@ -43,6 +43,8 @@ void init_gdt()
     tss.iopb = sizeof(tss); // everybody does this
 
     load_tss(TSS_DESC);
+
+    return RCODE_SUCESS;
 }
 
 void set_esp0(uint32_t esp0)

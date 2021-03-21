@@ -3,7 +3,7 @@
 #include "kernel/kernel.h"
 #include "arch-x86/multiboot.h"
 
-void init_multiboot()
+rcode_t init_multiboot()
 {
     uint32_t flags;
 
@@ -36,6 +36,8 @@ void init_multiboot()
 
     if (flags & MULTIBOOT_FLAGS_NAME)
         multiboot_ptr->boot_loader_name += KERNEL_BASE;
+
+    return RCODE_SUCESS;
 }
 
 multiboot_info_t* multiboot_ptr;
