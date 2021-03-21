@@ -61,3 +61,6 @@ install: YeetOS
 
 run: install
 	scripts/run.sh
+
+debug: install
+	scripts/debug.sh

@@ -3,6 +3,7 @@ OBJECTS=\
 main.o \
 debug.o \
 panic.o \
+kheap.o \
 
 kernel.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)
