@@ -22,7 +22,7 @@ uintptr_t heap_start;
 uintptr_t heap_end;
 size_t heap_size;
 
-rcode_t init_kheap()
+int init_kheap()
 {
     heap_start = (uintptr_t)&heap_mem;
     heap_size = sizeof(heap_mem);
@@ -37,7 +37,7 @@ rcode_t init_kheap()
     blk->size = 0;
     blk->cap = heap_size - sizeof(heap_block_t);
 
-    return RCODE_SUCESS;
+    return SUCCESS;
 }
 
 void* kmalloc(size_t size)

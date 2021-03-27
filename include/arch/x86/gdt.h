@@ -61,7 +61,7 @@ typedef struct tss_t {
 
 } __attribute__((packed, aligned(16))) tss_t;
 
-rcode_t init_gdt();
+int init_gdt();
 
 void load_gdt(gdtr_t* gdtr);
 void load_tss(uint16_t desc);

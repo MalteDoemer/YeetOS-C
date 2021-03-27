@@ -48,7 +48,7 @@ typedef enum pg_flags_t {
     PG_EXECUTABLE,
 } pg_flags_t;
 
-rcode_t init_paging();
+int init_paging();
 
 // page_dir_t* create_page_dir();
 // void free_page_dir(page_dir_t* pd);

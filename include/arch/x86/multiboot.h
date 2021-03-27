@@ -97,6 +97,6 @@ typedef struct multiboot_mod_t {
 extern multiboot_info_t* multiboot_ptr;
 extern uint32_t* multiboot_sig;
 
-rcode_t init_multiboot();
+int init_multiboot();
 
 #endif // #ifndef MULTIBOOT_H

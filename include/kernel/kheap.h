@@ -6,7 +6,7 @@
 
 #include "kernel/kernel.h"
 
-rcode_t init_kheap();
+int init_kheap();
 
 void* kmalloc(size_t size) MALLOC;
 void* kcmalloc(size_t num, size_t size) MALLOC;

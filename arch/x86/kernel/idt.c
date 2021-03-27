@@ -54,7 +54,7 @@ void mask_irq(uint8_t irq, bool mask)
     outb(0xA1, pic2_mask);
 }
 
-rcode_t init_idt()
+int init_idt()
 {
     remap_pic();
 
@@ -71,5 +71,5 @@ rcode_t init_idt()
 
     load_idt(&idtr);
 
-    return RCODE_SUCESS;
+    return SUCCESS;
 }

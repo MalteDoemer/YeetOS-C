@@ -1,5 +1,6 @@
 
 OBJECTS=\
+errno.o \
 memset.o \
 memcmp.o \
 memcpy.o \

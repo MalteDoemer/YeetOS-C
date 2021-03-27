@@ -24,7 +24,7 @@ typedef struct isr_stub_t {
     uint8_t code[9];
 } __attribute__((packed)) isr_stub_t;
 
-rcode_t init_idt();
+int init_idt();
 
 void load_idt(idtr_t* idtr);
 void mask_irq(uint8_t irq, bool mask);

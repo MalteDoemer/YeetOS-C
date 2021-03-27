@@ -1,8 +1,8 @@
 #include "stdint.h"
 #include "stddef.h"
 #include "stdbool.h"
-
-#include "libc/string.h"
+#include "string.h"
+#include "errno.h"
 
 #include "kernel/kernel.h"
 #include "kernel/debug.h"
@@ -357,8 +357,8 @@ void keyboard_handler(regs_t* regs)
     outb(0x20, 0x20);
 }
 
-CTOR rcode_t init_keyboard()
+CTOR int init_keyboard()
 {
     set_keyboard_int(keyboard_handler);
-    return RCODE_SUCESS;
+    return SUCCESS;
 }

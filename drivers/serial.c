@@ -1,6 +1,7 @@
 #include "stdint.h"
 #include "stddef.h"
 #include "stdbool.h"
+#include "errno.h"
 
 #include "kernel/kernel.h"
 
@@ -23,7 +24,7 @@
 #define MODEM_STAT 6
 #define SCRATCH 7
 
-static rcode_t init_com_port(uint16_t port)
+static int init_com_port(uint16_t port)
 {
     // disable all serial interrupts
     outb(port + IER, 0x00);
@@ -42,7 +43,7 @@ static rcode_t init_com_port(uint16_t port)
     // set OUT1, OUT2, RTS and DSR to inactive
     outb(port + MODEM_CTRL, 0x0F);
 
-    return RCODE_SUCESS;
+    return SUCCESS;
 }
 
 static inline bool is_transmit_empty(uint16_t port)
@@ -63,8 +64,8 @@ size_t serial_write(uint16_t port, char* buffer, size_t num)
     return num;
 }
 
-CTOR rcode_t init_serial()
+CTOR int init_serial()
 {
     init_com_port(COM1);
-    return RCODE_SUCESS;
+    return SUCCESS;
 }

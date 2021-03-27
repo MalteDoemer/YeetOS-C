@@ -5,7 +5,7 @@
 
 #include "kernel/kernel.h"
 
-rcode_t init_multiboot()
+int init_multiboot()
 {
     uint32_t flags;
 
@@ -39,7 +39,7 @@ rcode_t init_multiboot()
     if (flags & MULTIBOOT_FLAGS_NAME)
         multiboot_ptr->boot_loader_name += KERNEL_BASE;
 
-    return RCODE_SUCESS;
+    return SUCCESS;
 }
 
 multiboot_info_t* multiboot_ptr;

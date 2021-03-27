@@ -22,7 +22,7 @@ void heap_test()
 
 void call_ctors()
 {
-    typedef rcode_t (*ctor_t)();
+    typedef int (*ctor_t)();
 
     extern ctor_t ctors_start;
     extern ctor_t ctors_end;
@@ -31,13 +31,13 @@ void call_ctors()
         return;
 
     ctor_t* ctor = &ctors_end;
-    rcode_t ret;
+    int ret;
 
     do {
         ctor--;
         ret = (*ctor)();
-        if (ret != RCODE_SUCESS) {
-            WARN("constructor failed with rcode %d", ret);
+        if (ret != SUCCESS) {
+            WARN("%s", "constructor failed");
         }
 
     } while (ctor > &ctors_start);

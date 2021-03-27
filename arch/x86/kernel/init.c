@@ -11,7 +11,7 @@
 
 #include "kernel/kernel.h"
 
-rcode_t init_arch()
+int init_arch()
 {
     init_multiboot();
 
@@ -19,5 +19,5 @@ rcode_t init_arch()
     init_idt();
     init_interrupts();
 
-    return RCODE_SUCESS;
+    return SUCCESS;
 }
