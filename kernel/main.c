@@ -6,7 +6,6 @@
 #include "kernel/kernel.h"
 #include "kernel/kheap.h"
 #include "kernel/panic.h"
-#include "kernel/fs.h"
 
 void color_test()
 {
