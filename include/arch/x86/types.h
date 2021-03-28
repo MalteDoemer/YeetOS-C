@@ -4,6 +4,9 @@
 #include "stdint.h"
 #include "stddef.h"
 
+typedef long long lloff_t;
+typedef long loff_t;
+
 typedef struct regs_t {
     uint32_t user_ds;
     uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;

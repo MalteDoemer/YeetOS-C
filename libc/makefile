@@ -4,6 +4,9 @@ errno.o \
 memset.o \
 memcmp.o \
 memcpy.o \
+strlen.o \
+strcmp.o \
+strdup.o \
 vsnprintf.o \
 isdigit.o \
 isalpha.o \

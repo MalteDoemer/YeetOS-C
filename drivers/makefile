@@ -3,7 +3,9 @@ ifeq ($(ARCH), x86)
 OBJECTS=\
 serial.o \
 vga_text.o \
-ps2_keyboard.o
+ata.o \
+ps2_keyboard.o \
+
 
 else
 
